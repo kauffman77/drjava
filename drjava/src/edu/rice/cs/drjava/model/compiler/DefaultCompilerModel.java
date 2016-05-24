@@ -74,7 +74,7 @@ import static edu.rice.cs.plt.debug.DebugUtil.debug;
 public class DefaultCompilerModel implements CompilerModel {
   
   /** for logging debug info */
-  private static edu.rice.cs.util.Log _log = new edu.rice.cs.util.Log("GlobalModel.txt", false);
+  private static edu.rice.cs.util.Log _log = new edu.rice.cs.util.Log("GlobalModel.txt", true);
   
   /** The available compilers */
   private final List<CompilerInterface> _compilers;
@@ -188,6 +188,7 @@ public class DefaultCompilerModel implements CompilerModel {
     * @throws IOException if a filesystem-related problem prevents compilation
     */
   public void compileProject() throws IOException {
+    _log.log("compileProject called. _model.isProjectActive() = " + _model.isProjectActive());
     if (! _model.isProjectActive()) 
       throw new UnexpectedException("compileProject invoked when DrScala is not in project mode");
     
@@ -239,9 +240,9 @@ public class DefaultCompilerModel implements CompilerModel {
   /** Compile the given documents. All compile commands invoke this private method! */
   private void _doCompile(List<OpenDefinitionsDocument> docs) throws IOException {
 //    _LLSTM.clearCache();
-//    System.err.println("_doCompile(" + docs + ") called");
+    _log.log("_doCompile(" + docs + ") called");
     final ArrayList<File> filesToCompile = new ArrayList<File>();
-//    final ArrayList<OpenDefinitionsDocument> validDocs = new ArrayList<OpenDefinitionsDocument>();
+    final ArrayList<OpenDefinitionsDocument> validDocs = new ArrayList<OpenDefinitionsDocument>();
     final ArrayList<File> excludedFiles = new ArrayList<File>();
     final ArrayList<DJError> prelimErrors = new ArrayList<DJError>();
     
@@ -250,13 +251,19 @@ public class DefaultCompilerModel implements CompilerModel {
       if (doc.isSourceFile()) {
         File f = doc.getFile();
         // Check for null in case the file is untitled (not sure this is the correct check)
-        if (f != null && f != FileOps.NULL_FILE) filesToCompile.add(f);
+        if (f != null && f != FileOps.NULL_FILE) {
+          filesToCompile.add(f);
+          _log.log("File " + f + " added to filesToCompile");
+        }
+        else _log.log("File " + f + " is not a source file!");
 
         doc.setCachedClassFile(FileOps.NULL_FILE); // clear cached class file
         
-        try { doc.getSourceRoot(); }
+        File sroot = null;  // initialization required by the Java compiler
+        try { sroot = doc.getSourceRoot(); }
         catch (InvalidPackageException e) {
           prelimErrors.add(new DJError(f, e.getMessage(), false));
+          _log.log("Source root " + sroot + " contains invalid package name");
         }
       }
       else excludedFiles.add(doc.getFile());
@@ -280,36 +287,38 @@ public class DefaultCompilerModel implements CompilerModel {
 //      prelimErrors.add(new DJError(f, e.getMessage(), false));
 //    }
     
-    if (filesToCompile.size() == 0) 
+    if (filesToCompile.size() == 0)  {
       prelimErrors.add(new DJError("None of the documents in " + docs + " is a valid source file!", false));
+      _log.log("filesToCompile is empty!");
+    }
     
     Utilities.invokeLater(new Runnable() { public void run() { _notifier.compileStarted(); } });
     
     try {
       if (! prelimErrors.isEmpty()) { 
-//        System.err.println("Preliminary errors found in compilation");
+       _log.log("Preliminary errors found in compilation");
         _distributeErrors(prelimErrors); 
       }
       else
         try {
-//        assert filesToCompile.size() > 0;
+        assert filesToCompile.size() > 0;
         // Determine output directory (buildDir)
         File buildDir = _model.getBuildDirectory();
+        _log.log("Preparing to invoke scalac; buildDir = " + buildDir);
+        _log.log("buildDir.exists() = " + buildDir.exists());
         
         if (buildDir != null && buildDir != FileOps.NULL_FILE && ! buildDir.exists() && ! buildDir.mkdirs())
           throw new IOException("Could not create build directory: " + buildDir);
         
-        
-//        File buildDir = _model.isProjectActive() ? _model.getBuildDirectory() : sourceRoot;
         if (buildDir == null || buildDir == FileOps.NULL_FILE) {  // flat file mode or unset build directory in a project 
           buildDir = _model.getProjectRoot();
           _model.setBuildDirectory(buildDir);
-          
-//        Utilities.show("buildDir is: " + buildDir);
-          
-          System.err.println("Calling _compileFiles(" + filesToCompile + ", " + buildDir + ")");
-          _compileFiles(filesToCompile, buildDir);
+          _log.log("Setting buildDir to project root " + buildDir);
         }
+        
+        // call compileFiles to invoke scalac
+        _log.log("Calling _compileFiles(" + filesToCompile + ", " + buildDir + ")");
+        _compileFiles(filesToCompile, buildDir);
       }
       catch (Throwable t) {
         DJError err = new DJError(t.toString(), false);
@@ -319,7 +328,9 @@ public class DefaultCompilerModel implements CompilerModel {
     }
     finally {
       Utilities.invokeLater(new Runnable() {
-        public void run() { _notifier.compileEnded(_model.getWorkingDirectory(), excludedFiles); }
+        public void run() { 
+          _notifier.compileEnded(_model.getWorkingDirectory(), excludedFiles); 
+        }
       });
     }
   }
@@ -336,7 +347,7 @@ public class DefaultCompilerModel implements CompilerModel {
     
     /* Canonicalize buildDir */
 //    if (buildDir == FileOps.NULL_FILE) buildDir = null; // compiler interface wants null pointer if no build directory
-    if (buildDir != null) buildDir = IOUtil.attemptCanonicalFile(buildDir);
+    if (buildDir != null && buildDir != FileOps.NULL_FILE) buildDir = IOUtil.attemptCanonicalFile(buildDir);
     
     _buildDir = buildDir;  // Cache build directory in this compiler model so it can displayed in CompilerErrorPanel
     

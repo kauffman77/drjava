@@ -84,7 +84,7 @@ import edu.rice.cs.util.Log;
 
 import org.objectweb.asm.*;
 
-import static edu.rice.cs.plt.debug.DebugUtil.debug;
+//import static edu.rice.cs.plt.debug.DebugUtil.debug;
 import static edu.rice.cs.drjava.config.OptionConstants.*;
 
 /** Manages unit testing via JUnit.
@@ -225,7 +225,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   /** Runs JUnit on the current document.  Forces the user to compile all open documents before proceeding. */
   public void junit(OpenDefinitionsDocument doc) throws ClassNotFoundException, IOException {
     
-    debug.logStart("junit(doc)");
+    _log.log("junit(doc)");
     
 //    new ScrollableDialog(null, "junit(" + doc + ") called in DefaultJunitModel", "", "").show();
     File testFile;
@@ -233,7 +233,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
       testFile = doc.getFile(); 
       if (testFile == null) {  // document is untitiled: abort unit testing and return
         nonTestCase(false, false);
-        debug.logEnd("junit(doc): no corresponding file");
+        _log.log("junit(doc): no corresponding file");
         return;
       }
     } 
@@ -242,7 +242,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
     LinkedList<OpenDefinitionsDocument> lod = new LinkedList<OpenDefinitionsDocument>();
     lod.add(doc);
     junitOpenDefDocs(lod, false);
-    debug.logEnd("junit(doc)");
+    _log.log("junit applied to current document");
   }
   
   /** Ensures that all documents have been compiled since their last modification and then delegates the actual testing
