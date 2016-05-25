@@ -43,6 +43,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
+import edu.rice.cs.util.swing.Utilities;
+
 /** Logging class to record errors or unexpected behavior to a file.  The file is created in the current directory,
   * and is only used if the log is enabled.  All logs can be enabled at once with the ENABLE_ALL field.
   * @version $Id: Log.java 5594 2012-06-21 11:23:40Z rcartwright $
@@ -86,6 +88,7 @@ public class Log {
       if (_isEnabled || ENABLE_ALL) {
         try {
           FileWriter w = new FileWriter(_file.getAbsolutePath(), true);
+//          Utilities.show("Created Log file: " + _file.getAbsolutePath());
           _writer = new PrintWriter(w);
           log("Log '" + _name + "' opened: " + DATE_FORMAT.format(new Date()));
         }

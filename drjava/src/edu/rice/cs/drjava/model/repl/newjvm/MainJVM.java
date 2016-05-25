@@ -118,7 +118,7 @@ public class MainJVM extends AbstractMasterJVM implements MainJVMRemoteI {
 //  state machines should obviously be consolidated.
 
   /** Debugging log. */
-  public static final Log _log  = new Log("MasterJVM.txt", false);
+  public static final Log _log  = new Log("MasterJVM.txt", true);
   
   /* TODO: add additional phase to Phase called BusyPhase instead of using a _busy flag */
   private volatile boolean _busy = false;  // flag that records whether the interpreter is busy
@@ -496,7 +496,10 @@ public class MainJVM extends AbstractMasterJVM implements MainJVMRemoteI {
   public Option<List<String>> findTestClasses(List<String> classNames, List<File> files) {
     InterpreterJVMRemoteI remote = _stateMonitor.value().interpreter();
     _log.log("***** In MainJVM.findTestClasses, remote = " + remote);
-    if (remote == null | _busy) { return Option.none(); }
+    if (remote == null | _busy) { 
+      _log.log("***** In MainJVM.findTestClasses, remote is either null or busy, so no test classes are found");
+      return Option.none(); 
+    }
     try { 
       _log.log("***** In MainJVM.findTestClasses, forwarding method call to remote");
       return Option.some(remote.findTestClasses(classNames, files)); 

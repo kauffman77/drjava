@@ -81,7 +81,7 @@ import scala.tools.nsc.reporters.ConsoleReporter;
 public class ScalaCompiler extends Javac160FilteringCompiler implements /* Scala */ CompilerInterface {
   
 //  _log is also defined in a superclass
-  public static final Log _log = new Log("jdk8.txt", true);
+  public static final Log _log = new Log("jdk8.txt", false);
   
   private File _outputDir = null;
     

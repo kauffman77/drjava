@@ -122,9 +122,8 @@ public final class GlobalModelCompileErrorsTest extends GlobalModelTestCase {
     * As the test is then run one time per compiler it can find. 
     */
   public void testCompileAllFailsDifferentSourceRoots() throws BadLocationException, IOException, InterruptedException {
-//    debug.logStart();
-    
-//    System.err.println("Starting testCompileAllFailsDifferentSourceRoots");
+
+    _log.log("Starting testCompileAllFailsDifferentSourceRoots");
     
     File aDir = new File(_tempDir, "a");
     File bDir = new File(_tempDir, "b");

@@ -124,7 +124,7 @@ public class ScalaDescriptor extends JDKDescriptor {
   }
   
   /** True if this is a compound JDK and needs a fully featured JDK to operate.
-    * @return true if compound JDK (e.g. NextGen, Mint, Habanero). */
+    * @return true if compound JDK (e.g. NextGen, Mint, Habanero, Scala). */
   public boolean isCompound() { return true; }
   
   /** Return true if the file (jar file or directory) contains the compiler.
@@ -141,7 +141,7 @@ public class ScalaDescriptor extends JDKDescriptor {
     * this corresponding version of Java is Java 6.
     * @return guessed version */
   public JavaVersion.FullVersion guessVersion(File f) {
-      return JavaVersion.parseFullVersion(JavaVersion.JAVA_6.fullVersion().versionString(), /* TODO: add SCALA to ENUM definition */
+      return JavaVersion.parseFullVersion(JavaVersion.JAVA_8.fullVersion().versionString(), /* TODO: add SCALA to ENUM definition */
                                           "Java PLT Research Group",
                                           "Java PLT Research Group",
                                           f);
@@ -157,7 +157,7 @@ public class ScalaDescriptor extends JDKDescriptor {
   
   /** Return the minimum Java version required to use this JDK.
     * @return minimum version */
-  public JavaVersion getMinimumMajorVersion() { return JavaVersion.JAVA_5; }
+  public JavaVersion getMinimumMajorVersion() { return JavaVersion.JAVA_8; }
   
   /** Return the list of additional files required to use the compiler.
     * The compiler was found in the specified file. This method may have to search the user's hard drive, e.g.

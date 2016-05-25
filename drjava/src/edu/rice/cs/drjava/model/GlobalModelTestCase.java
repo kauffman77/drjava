@@ -936,7 +936,10 @@ public abstract class GlobalModelTestCase extends MultiThreadedTestCase {
     public void compileEnded(File workDir, List<? extends File> excludedFiles) { 
       listenerFail("compileEnded fired unexpectedly"); 
     }
-    public void compileAborted(Exception e) { listenerFail("compileAborted fired unexpectedly"); }
+    public void compileAborted(Exception e) {
+      
+      listenerFail("compileAborted fired unexpectedly"); 
+    }
     public void activeCompilerChanged() { listenerFail("activeCompilerChanged fired unexpectedly"); }
 
     public void prepareForRun(OpenDefinitionsDocument doc) { listenerFail("prepareForRun fired unexpectedly"); }

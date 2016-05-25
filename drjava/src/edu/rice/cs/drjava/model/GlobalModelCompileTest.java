@@ -131,7 +131,6 @@ public final class GlobalModelCompileTest extends GlobalModelTestCase {
       public void saveBeforeCompile() {
         assertModified(true, doc);
         synchronized(this) { saveBeforeCompileCount++; }
-        // since we don't actually save the compile should abort
       }
     };
     
@@ -141,6 +140,7 @@ public final class GlobalModelCompileTest extends GlobalModelTestCase {
     listener.assertSaveBeforeCompileCount(1);
     assertModified(true, doc);
     assertContents(FOO_TEXT, doc);
+    
     _model.removeListener(listener);
     _log.log("testCompileAbortsIfUnsaved complete");
   }

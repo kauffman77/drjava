@@ -93,7 +93,7 @@ import static edu.rice.cs.drjava.config.OptionConstants.*;
 public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   
   /** log for use in debugging */
-  private static Log _log = new Log("GlobalModel.txt", false);
+  private static Log _log = new Log("GlobalModel.txt", true);
   
   /** Manages listeners to this model. */
   private final JUnitEventNotifier _notifier = new JUnitEventNotifier();
@@ -233,7 +233,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
       testFile = doc.getFile(); 
       if (testFile == null) {  // document is untitiled: abort unit testing and return
         nonTestCase(false, false);
-        _log.log("junit(doc): no corresponding file");
+        _log.log("junit(doc) called: no corresponding file");
         return;
       }
     } 
@@ -273,6 +273,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
           // see bug report 2582488: Hangs If Testing Modified File, But Choose "No" for Saving
           final CompilerListener listenerThis = this;
           try {
+            _log.log("Calling nonTestCase within DefaultJUnitModel.compileAborted with exception " + e);
             nonTestCase(allTests, false);
           }
           finally {  // always remove this listener after its first execution
@@ -287,6 +288,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
           try {
             _log.log("compileEnded called.  outOfSync = " + _model.hasOutOfSyncDocuments(lod));
             if (_model.hasOutOfSyncDocuments(lod) || _model.getNumCompilerErrors() > 0) {
+              _log.log("nonTestCase called because " + lod + " has out-of-sync documents or compilation errors");
               nonTestCase(allTests, _model.getNumCompilerErrors() > 0);
               return;
             }
@@ -398,16 +400,16 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
               String noExtName = name.substring(0, name.length() - 6);  // remove ".class" from name
               int indexOfLastDot = noExtName.lastIndexOf('.');
               String simpleClassName = noExtName.substring(indexOfLastDot + 1);
-            _log.log("Simple class name is " + simpleClassName);  
+              _log.log("Simple class name is " + simpleClassName);  
               if (/*isProject &&*/ ! simpleClassName.endsWith("Test")) continue;
             }
             
             /* ignore entries that do not correspond to files?  Can this happen? */
             if (! entry.isFile()) continue;
             
-            _log.log("Found test class: " + name);
+            _log.log("Found potential test class: " + name);
             
-            // Add this class and the corrresponding source file to classNames and files, respectively.
+            // Add this class and the corresponding source file to classNames and files, respectively.
             
             try {
               final Box<String> className = new SimpleBox<String>();
@@ -415,8 +417,10 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
               new ClassReader(IOUtil.toByteArray(entry)).accept(new ClassVisitor(Opcodes.ASM4) {
                 public void visit(int version, int access, String name, String sig, String sup, String[] inters) {
                   className.set(name.replace('/', '.'));
+                  _log.log("**** class name = " + className.value() + " ****");
                 }
-                public void visitSource(String source /*, String debug */) {
+                public void visitSource(String source, String debug) {
+                  _log.log("**** sourceName = " + source + " ****");
                   sourceName.set(source);
                 }
                 
@@ -493,6 +497,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
 //          Utilities.show("found tests " + tests);
           _log.log("tests = " + tests);
           if (tests == null || tests.isEmpty()) {
+            _log.log("nonTestCase called because list of test classes is empty");
             nonTestCase(allTests, false);
             return;
           }
@@ -562,7 +567,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   public void nonTestCase(final boolean isTestAll, boolean didCompileFail) {
     // NOTE: junitStarted is called in a different thread from the testing thread.  The _testInProgress flag
     //       is used to prevent a new test from being started and overrunning the existing one.
-//      Utilities.show("DefaultJUnitModel.nonTestCase(" + isTestAll + ") called");
+    _log.log("DefaultJUnitModel.nonTestCase(" + isTestAll + ") called");
     _notifyNonTestCase(isTestAll, didCompileFail);
     _testInProgress = false;
   }

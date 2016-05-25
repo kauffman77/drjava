@@ -40,7 +40,9 @@ import java.io.File;
 import java.util.List;
 
 import edu.rice.cs.drjava.model.compiler.CompilerListener;
+
 import edu.rice.cs.util.FileOpenSelector;
+import edu.rice.cs.util.Log;
 import edu.rice.cs.util.classloader.ClassFileError;
 import edu.rice.cs.util.swing.AsyncTask;
 
@@ -70,6 +72,8 @@ import edu.rice.cs.util.swing.AsyncTask;
 
 public class GlobalEventNotifier extends EventNotifier<GlobalModelListener> implements GlobalModelListener 
   /*, Serializable */ {
+  
+  public static final Log _log = new Log("GlobalModel.txt", false);
   
   public <P,R> void executeAsyncTask(AsyncTask<P,R> task, P param, boolean showProgress, boolean lockUI) {
     _lock.startRead();
@@ -425,6 +429,7 @@ public class GlobalEventNotifier extends EventNotifier<GlobalModelListener> impl
   
    /** Called if a compile is aborted. */
   public void compileAborted(Exception e) {
+    _log.log("Compile Aborted; " + e + " thrown");
     _lock.startRead();
     try { for (GlobalModelListener l : _listeners) { l.compileAborted(e); } }
     finally { _lock.endRead(); }

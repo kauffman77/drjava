@@ -556,28 +556,10 @@ public class AbstractGlobalModel implements SingleDisplayModel, OptionConstants,
   /** Sets autofresh status of the project */
   public void setAutoRefreshStatus(boolean status) { _state.setAutoRefreshStatus(status); }
   
-  /** @return the defrault working directory for the Master JVM (editor and GUI). If _activeDirectory is non-null,
+  /** @return the default working directory for the Master JVM (editor and GUI). If _activeDirectory is non-null,
     * it is probably a better choice for a guessed working directory.  */
   public File getMasterWorkingDirectory() {
-    /* On startup, LAST_DIRECTORY is random!  It may be left over from unit testing (including 
-     * a failing unit test) and no longer exist!  It should NEVER be used in a fresh start of DrJava!
-     */
     return FileOps.getValidDirectory(new File(System.getProperty("user.home", ".")));
-      
-//    File file;
-//    try {
-//      // restore the path from the configuration
-//      file = FileOps.getValidDirectory(DrScala.getConfig().getSetting(LAST_DIRECTORY));
-//    }
-//    catch (RuntimeException e) {
-//      // something went wrong, clear the setting and use "user.home"
-//      DrScala.getConfig().setSetting(LAST_DIRECTORY, FileOps.NULL_FILE);
-//      file = ;
-//    }
-//    // update the setting and return it
-//    DrScala.getConfig().setSetting(LAST_DIRECTORY, file);
-//    return file;
-//  }
   }
   
   /** @return the working directory for the Slave (Interactions) JVM */

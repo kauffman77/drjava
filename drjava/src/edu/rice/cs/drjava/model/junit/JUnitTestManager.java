@@ -68,7 +68,7 @@ import static edu.rice.cs.plt.debug.DebugUtil.error;
   */
 public class JUnitTestManager {
  
-  protected static final Log _log = new Log("JUnitTestManager.txt", false);
+  protected static final Log _log = new Log("GlobalModel.txt", false);
   
   /** The interface to the master JVM via RMI. */
   private final JUnitModelCallback _jmc;
@@ -101,7 +101,7 @@ public class JUnitTestManager {
     */
   public List<String> findTestClasses(final List<String> classNames, final List<File> files) {
 //    debug.logStart(new String[]{"classNames", "files"}, classNames, files);
-    _log.log("findTestClasses(" + classNames + ", " + files + ")");
+    _log.log("findTestClasses(" + classNames + ", " + files + ") called");
 //    Utilities.show("findTestClasses(" + classNames + ", " + files + ")");
     
     if (_testClassNames != null && ! _testClassNames.isEmpty()) 
@@ -114,6 +114,7 @@ public class JUnitTestManager {
     _suite = new TestSuite();
     
     for (Pair<String, File> pair : IterUtil.zip(classNames, files)) {
+      _log.log("inspecting className/file pair: " + pair);
       String cName = pair.first();
       try {
         if (_isJUnitTest(_testRunner.loadPossibleTest(cName))) {
