@@ -173,10 +173,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   private volatile JUnitPanel _junitPanel;
   private volatile ScaladocErrorPanel _scaladocErrorPanel;
   private volatile FindReplacePanel _findReplace;
-    
-  /* Debugger deactivated in DrScala */
-//  private volatile BreakpointsPanel _breakpointsPanel;
-//  private volatile DebugPanel _debugPanel;
   
   private volatile BookmarksPanel _bookmarksPanel;
   private volatile InteractionsPane _consolePane;
@@ -189,11 +185,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   private volatile InteractionsScriptController _interactionsScriptController;
   private volatile InteractionsScriptPane _interactionsScriptPane;
   
-//  private volatile boolean _showDebugger;  // whether the supporting context is debugger capable
-  
-  /* Debugger deactivated in DrScala */
-//  private volatile DetachedFrame _debugFrame;
-  
   /** Panel to hold both InteractionsPane and its sync message. */
   
   // Status bar fields
@@ -205,9 +196,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   
   // Split panes for layout
   private volatile JSplitPane _docSplitPane;
-  
-  /* Debugger deactivated in DrScala */
-//  private volatile JSplitPane _debugSplitPane;
   
   JSplitPane _mainSplit;
   
@@ -230,11 +218,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   private volatile JMenu _toolsMenu;
   private volatile JMenu _projectMenu;
   private volatile JMenu _helpMenu;
-  
-  /* Debugger deactivated in DrScala */ 
-//  private volatile JMenu _debugMenu;
-//  private volatile JMenuItem _debuggerEnabledMenuItem;
-  
+
   // Popup menus
   private JPopupMenu _interactionsPanePopupMenu;
   private JPopupMenu _consolePanePopupMenu;
@@ -256,20 +240,11 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   
   private volatile File _currentProjFile;
   
-  /* Debugger deactivated in DrScala */
-//  /** Timer to display "Stepping..." message if a step takes longer than a certain amount of time.  All accesses
-//    * must be synchronized on it.
-//    */
-//  private volatile Timer _debugStepTimer;
-  
   /** Timer to step into another line of code. The delay for each step is recorded in milliseconds. */
   private volatile Timer _automaticTraceTimer;
   
-  /** The current highlight displaying the current location, used for FindAll and the of the debugger's thread,
-    * if there is one.  If there is none, this is null.
-    */
+  /** The current highlight displaying the current location used for FindAll; otherwise, this is null. */
   private volatile HighlightManager.HighlightInfo _currentLocationHighlight = null;
-  
     
   /* Debugger deactivated in DrScala */
 //  /** Table to map breakpoints to their corresponding highlight objects. */
@@ -547,41 +522,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   
   // menu item (checkbox menu) for detaching the tabbed panes
   private volatile JMenuItem _detachTabbedPanesMenuItem = null;
-  
-  /* Debugger deactivated in DrScala */
-//  /** Initializes the "Debugger" frame. */
-//  private void initDebugFrame() {
-//    if (_debugFrame == null) return; // debugger isn't used
-//    if (DrScala.getConfig().getSetting(DIALOG_DEBUGFRAME_STORE_POSITION).booleanValue()) {
-//      _debugFrame.setFrameState(DrScala.getConfig().getSetting(DIALOG_DEBUGFRAME_STATE));  
-//    }
-//  }
-//  
-//  /** Reset the position of the "Debugger" dialog. */
-//  public void resetDebugFrame() {
-//    if (_debugFrame == null) return; // debugger isn't used
-//    _debugFrame.setFrameState("default");
-//    if (DrScala.getConfig().getSetting(DIALOG_DEBUGFRAME_STORE_POSITION).booleanValue()) {
-//      DrScala.getConfig().setSetting(DIALOG_DEBUGFRAME_STATE, "default");
-//    }
-//  }
-//  
-//  /** Action that detaches the debugger pane.  Only runs in the event thread. */
-//  private final Action _detachDebugFrameAction = new AbstractAction("Detach Debugger") {
-//    { _addGUIAvailabilityListener(this, GUIAvailabilityListener.ComponentType.DEBUGGER); }
-//    public void actionPerformed(ActionEvent ae) { 
-//      if (_debugFrame == null) return; // debugger isn't used
-//      JMenuItem m = (JMenuItem)ae.getSource();
-//      boolean b = m.isSelected();
-//      _detachDebugFrameMenuItem.setSelected(b);
-//      DrScala.getConfig().setSetting(DETACH_DEBUGGER, b);
-//      _debugFrame.setDisplayInFrame(b);
-//    }
-//  };
-  
-  /* Debugger deactivated in DrScala */
-//  // menu item (checkbox menu) for detaching the debugger pane
-//  private volatile JMenuItem _detachDebugFrameMenuItem;
   
   /** Sets the document in the definitions pane to a new templated junit test class. */
   private final Action _newJUnitTestAction = new AbstractAction("New JUnit Test Case...") {
@@ -2424,110 +2364,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     public void actionPerformed(ActionEvent ae) { _editProject(); }
   };
   
-  /* Debugger deactivated in DrScala */
-//  /** Action that enables the debugger.  Only runs in the event thread. */
-//  private final Action _toggleDebuggerAction = new AbstractAction("Debug Mode") {
-//    { _addGUIAvailabilityListener(this,
-//                                 GUIAvailabilityListener.ComponentType.INTERACTIONS); }
-//    public void actionPerformed(ActionEvent ae) { 
-//      _guiAvailabilityNotifier.unavailable(GUIAvailabilityListener.ComponentType.INTERACTIONS);
-//      debuggerToggle();
-//      _guiAvailabilityNotifier.available(GUIAvailabilityListener.ComponentType.INTERACTIONS);
-//    }
-//  };
-  
-  /* Debugger deactivated in DrScala */
-//  /** Action that resumes debugging.  Only runs in the event thread. */
-//  private final Action _resumeDebugAction = new AbstractAction("Resume Debugger") {
-//    { _addGUIAvailabilityListener(this,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER_SUSPENDED); }
-//    public void actionPerformed(ActionEvent ae) {
-//      try { debuggerResume(); }
-//      catch (DebugException de) { MainFrameStatics.showDebugError(MainFrame.this, de); }
-//    }
-//  };
-  
-  /* Debugger deactivated in DrScala */
-//  // menu item (checkbox menu) for automatic trace in the debugger
-//  private volatile JMenuItem _automaticTraceMenuItem;
-//  
-//  public void setAutomaticTraceMenuItemStatus() {
-//    if (_automaticTraceMenuItem != null) {
-//      _automaticTraceMenuItem.setSelected(_model.getDebugger().isAutomaticTraceEnabled());
-//    }
-//  }
-  
-//  /** Action that automatically traces through entire program*/
-//  private final Action _automaticTraceDebugAction = new AbstractAction("Automatic Trace") {
-//    { _addGUIAvailabilityListener(this,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER_SUSPENDED); }
-//    public void actionPerformed(ActionEvent ae) { 
-//      debuggerAutomaticTrace(); 
-//    }
-//  };
-  
-//  /** Action that steps into the next method call.  Only runs in the event thread. */
-//  private final Action _stepIntoDebugAction = new AbstractAction("Step Into") {
-//    { _addGUIAvailabilityListener(this,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER_SUSPENDED); }
-//    public void actionPerformed(ActionEvent ae) { debuggerStep(Debugger.StepType.STEP_INTO); }
-//  };
-  
-//  /** Action that executes the next line, without stepping into methods.  Only runs in the event thread. */
-//  private final Action _stepOverDebugAction = new AbstractAction("Step Over") {
-//    { _addGUIAvailabilityListener(this,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER_SUSPENDED); }
-//    public void actionPerformed(ActionEvent ae) { debuggerStep(Debugger.StepType.STEP_OVER); }
-//  };
-//  
-//  /** Action that steps out of the next method call.  Only runs in the event thread. */
-//  private final Action _stepOutDebugAction = new AbstractAction("Step Out") {
-//    { _addGUIAvailabilityListener(this,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER,
-//                                  GUIAvailabilityListener.ComponentType.DEBUGGER_SUSPENDED); }
-//    public void actionPerformed(ActionEvent ae) {
-//      debuggerStep(Debugger.StepType.STEP_OUT);
-//    }
-//  };
-  
-  /** Suspend debugging */
-  /*private Action _suspendDebugAction =
-   new AbstractAction("Suspend Debugger")
-   {
-   public void actionPerformed(ActionEvent ae) {
-   _debugSuspend();
-   }
-   };*/
-  
-  /* Debugger deactivated in DrScala */
-  
-//  /** Toggles a breakpoint on the current line */
-//  final Action _toggleBreakpointAction = new AbstractAction("Toggle Breakpoint on Current Line") {
-//    public void actionPerformed(ActionEvent ae) { debuggerToggleBreakpoint(); }
-//  };
-//  
-//  /** Clears all breakpoints */
-//  private final Action _clearAllBreakpointsAction = new AbstractAction("Clear All Breakpoints") {
-//    public void actionPerformed(ActionEvent ae) { debuggerClearAllBreakpoints(); }
-//  };
-//   
-//  /** Action that shows the breakpoints tab.  Only runs in the event thread. */
-//  private final Action _breakpointsPanelAction = new AbstractAction("Breakpoints") {
-//    public void actionPerformed(ActionEvent ae) {
-//      if (_mainSplit.getDividerLocation() > _mainSplit.getMaximumDividerLocation()) 
-//        _mainSplit.resetToPreferredSizes(); 
-//      showTab(_breakpointsPanel, true);
-//      _breakpointsPanel.setVisible(true);
-//      _tabbedPane.setSelectedComponent(_breakpointsPanel);
-//      // Use EventQueue.invokeLater to ensure that focus is set AFTER the _breakpointsPanel has been selected
-//      EventQueue.invokeLater(new Runnable() { public void run() { _breakpointsPanel.requestFocusInWindow(); } });
-//    }
-//  };
-  
   /** Action that shows the bookmarks tab.  Only runs in the event thread. */
   private final Action _bookmarksPanelAction = new AbstractAction("Bookmarks") {
     public void actionPerformed(ActionEvent ae) {
@@ -3045,16 +2881,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
       // those in the Find/Replace panel
       Utilities.enableDisableWith(_findReplace._findNextAction, _findNextAction);
       Utilities.enableDisableWith(_findReplace._findPreviousAction, _findPrevAction);
-      
-      /* Debugger deactivated in DrScala */
-//      if (_showDebugger) {
-//        _debugPanel = new DebugPanel(MainFrame.this);
-//        _breakpointsPanel = new BreakpointsPanel(MainFrame.this, _model.getBreakpointManager());
-//      }
-//      else {
-//        _debugPanel = null;
-//        _breakpointsPanel = null; 
-//      }
      
       _compilerErrorPanel = new CompilerErrorPanel(_model, MainFrame.this);
       _consoleController = new ConsoleController(_model.getConsoleDocument(), _model.getSwingConsoleDocument());
@@ -3116,51 +2942,14 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
         new BorderlessSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
                                 new JScrollPane(_model.getDocumentNavigator().asContainer()), defScroll);
       
-      /* Debugger is deactivated in DrScala */
-//      _debugSplitPane = new BorderlessSplitPane(JSplitPane.VERTICAL_SPLIT, true);
       _mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, _docSplitPane, _tabbedPane);
-      
-// Lightweight parsing has been disabled until we have something that is beneficial and works better in the background.
-//    // The OptionListener for LIGHTWEIGHT_PARSING_ENABLED.
-//    OptionListener<Boolean> parsingEnabledListener = new OptionListener<Boolean>() {
-//      public void optionChanged(OptionEvent<Boolean> oce) {
-//        if (oce.value) {
-//          _model.getParsingControl().addListener(new LightWeightParsingListener() {
-//            public void enclosingClassNameUpdated(OpenDefinitionsDocument doc, String old, String updated) {
-//              if (doc == _model.getActiveDocument()) { updateStatusField(); }
-//            }
-//          });
-//        }
-//        _model.getParsingControl().reset();
-//        _model.getParsingControl().setAutomaticUpdates(oce.value);
-//        updateStatusField();
-//      }
-//    };
-//    DrScala.getConfig().addOptionListener(LIGHTWEIGHT_PARSING_ENABLED, parsingEnabledListener);
-//    parsingEnabledListener.
-//      optionChanged(new OptionEvent<Boolean>(LIGHTWEIGHT_PARSING_ENABLED, 
-//                                             DrScala.getConfig().
-//                                               getSetting(LIGHTWEIGHT_PARSING_ENABLED).booleanValue()));
-//    
-//    Utilities.show("Global Model started");
-      
+            
       _model.getDocumentNavigator().asContainer().addKeyListener(_historyListener);
       _model.getDocumentNavigator().asContainer().addFocusListener(_focusListenerForRecentDocs);
       
       /* Listens for clicks in the document navigator to reset the first document in an all-documents search for wrapping
        * purposes. */
       _model.getDocumentNavigator().asContainer().addMouseListener(_resetFindReplaceListener);
-      
-      /* Debugger is deactivated in DrScala */
-//      if (_showDebugger) _model.getDebugger().addListener(new UIDebugListener()); // add listener to debug manager
-//      
-//      // Timer to display a message if a debugging step takes a long time
-//      _debugStepTimer = new Timer(DEBUG_STEP_TIMER_VALUE, new ActionListener() {
-//        public void actionPerformed(ActionEvent e) {
-//          if (!_model.getDebugger().isAutomaticTraceEnabled()) { _model.printDebugMessage("Stepping ..."); }
-//        }
-//      });
-//      _debugStepTimer.setRepeats(false);
       
       // Working directory is default place to start (bug #895998).
       File workDir = _model.getMasterWorkingDirectory();
@@ -4147,84 +3936,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   
   public boolean getAllowKeyEvents() { return _allowKeyEvents; }
   
-  /* Debugger is deactivated in DrScala */
-  
-//  /** Toggles whether the debugger is enabled or disabled, and updates the display accordingly.  Only runs in the 
-//    * event thread. */
-//  public void debuggerToggle() {
-//    assert EventQueue.isDispatchThread();
-//    // Make sure the debugger is available
-//    Debugger debugger = _model.getDebugger();
-//    if (! debugger.isAvailable()) return;
-//    
-//    updateStatusField("Toggling Debugger Mode");
-//    try { 
-//      if (isDebuggerReady()) {
-//        _guiAvailabilityNotifier.ensureUnavailable(GUIAvailabilityListener.ComponentType.DEBUGGER);
-//        debugger.shutdown();
-//      }
-//      else {
-//        // Turn on debugger
-//        hourglassOn();
-//        try {
-//          debugger.startUp();  // may kick active document (if unmodified) out of memory!
-////          System.err.println("Trying to start debugger");
-//          _model.refreshActiveDocument();
-//          _updateDebugStatus();
-//        }
-//        finally { hourglassOff(); }
-//      }
-//    }
-//    catch (DebugException de) { 
-//      MainFrameStatics.showError(MainFrame.this, de, "Debugger Error", "Could not start the debugger."); 
-//    }
-//    catch (NoClassDefFoundError err) {
-//      MainFrameStatics.showError(MainFrame.this, err, "Debugger Error",
-//                               "Unable to find the JPDA package for the debugger.\n" +
-//                               "Please make sure either tools.jar or jpda.jar is\n" +
-//                               "in your classpath when you start DrScala.");
-//      _setDebugMenuItemsEnabled(false);
-//    }
-//  }
-  
-  /* Debugger deactivated in DrScala */
-//  /** Display the debugger tab and update the Debug menu accordingly. */
-//  public void showDebugger() {
-//    assert EventQueue.isDispatchThread();
-//    _setDebugMenuItemsEnabled(true);
-//    _showDebuggerPanel();
-//  }
-//  
-//  /** Hide the debugger tab and update the Debug menu accordingly. */
-//  public void hideDebugger() {
-//    _setDebugMenuItemsEnabled(false);
-//    _hideDebuggerPanel();
-//  }
-//  
-//  private void _showDebuggerPanel() {
-//    if (_debugFrame == null) return; // debugger isn't used
-//    if (_detachDebugFrameMenuItem.isSelected()) {
-//      _debugFrame.setDisplayInFrame(true);
-//    }
-//    else {
-//      _debugSplitPane.setTopComponent(_docSplitPane);
-//      _mainSplit.setTopComponent(_debugSplitPane);
-//    }
-//    _debugPanel.updateData();
-//    _lastFocusOwner.requestFocusInWindow();
-//  }
-//  
-//  private void _hideDebuggerPanel() {
-//    if (_debugFrame == null) return; // debugger isn't used
-//    if (_detachDebugFrameMenuItem.isSelected()) {
-//      _debugFrame.setVisible(false);
-//    }
-//    else {
-//      _mainSplit.setTopComponent(_docSplitPane);
-//    }
-//    _lastFocusOwner.requestFocusInWindow();
-//  }
-  
   /** ONLY executes in event thread. */
   public void updateStatusField(String text) {
     assert EventQueue.isDispatchThread();
@@ -4240,8 +3951,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
       _fileTitle = fileName;
       setTitle("DrScala: " + fileName);
       _tabbedPanesFrame.setTitle("Tabbed Panes - " + fileName);
-      /* Debugger is deactivated in DrScala */
-//      if (_debugFrame!=null) _debugFrame.setTitle("Debugger - " + fileName);
       _model.getDocCollectionWidget().repaint();
     }
     String path = doc.getCompletePath();
@@ -4351,16 +4060,10 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
       public void insertUpdate(DocumentEvent e) {
         assert EventQueue.isDispatchThread();
         _saveAction.setEnabled(true);
-        /* Debugger is deactivated in DrScala */
-//        if (isDebuggerEnabled() && _debugPanel.getStatusText().equals(""))
-//          _debugPanel.setStatusText(DEBUGGER_OUT_OF_SYNC);
       }
       public void removeUpdate(DocumentEvent e) {
         assert EventQueue.isDispatchThread();
         _saveAction.setEnabled(true);
-        /* Debugger is deactivated in DrScala */
-//        if (isDebuggerEnabled() && _debugPanel.getStatusText().equals(""))
-//          _debugPanel.setStatusText(DEBUGGER_OUT_OF_SYNC);
       }
     });
   }
@@ -5589,191 +5292,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     catch(Exception e) { _junitInterrupted(new UnexpectedException(e)); }
   }
   
-//  /**
-//   * Suspends the current execution of the debugger
-//   */
-//  private void debuggerSuspend() throws DebugException {
-//    if (isDebuggerReady())
-//      _model.getDebugger().suspend();
-//  }
-  
-  /* Debugger deactivated in DrScala */
-//  /** Resumes the debugger's current execution. */
-//  void debuggerResume() throws DebugException {
-//    if (isDebuggerReady()) {
-//      _model.getDebugger().resume();
-//      removeCurrentLocationHighlight();
-//    }
-//  }
-  
-  /* Debugger deactivated in DrScala */
-//  /** Automatically traces through the entire program with a defined rate for stepping into each line of code*/
-//  void debuggerAutomaticTrace() {
-//    _log.log("debuggerAutomaticTrace(): isDebuggerReady() = "+isDebuggerReady()); 
-//    if (isDebuggerReady())  {
-//      if(!_model.getDebugger().isAutomaticTraceEnabled()) {
-//        enableAutomaticTrace();
-//      }
-//      else {
-//        disableAutomaticTrace();
-//      }
-//    }    
-//  }
 
-  /* Debugger deactivated in DrScala */
-//  /** Enable automatic trace. Assumes that the debugger is ready. */
-//  private void enableAutomaticTrace() {
-//    if (!isDebuggerEnabled()) return; // debugger isn't used
-//    try {
-//      int rate = DrScala.getConfig().getSetting(OptionConstants.AUTO_STEP_RATE);
-//      
-//      _automaticTraceTimer = new Timer(rate, new ActionListener() {
-//        public void actionPerformed(ActionEvent e) {
-//          _debugStepTimer.stop();
-//          if (_model.getDebugger().isAutomaticTraceEnabled()) {
-//            // hasn't been disabled in the meantime
-//            debuggerStep(Debugger.StepType.STEP_INTO);
-////                _debugStepTimer.restart();  // _debugStepTimer prints "Stepping..." when timer expires
-//          }
-//        }
-//      });
-//      _automaticTraceTimer.setRepeats(false);
-//      _model.getDebugger().setAutomaticTraceEnabled(true);
-//      _debugPanel.setAutomaticTraceButtonText();
-//      debuggerStep(Debugger.StepType.STEP_INTO);
-//      _debugStepTimer.stop();
-//    }
-//    catch (IllegalStateException ise) {
-//      /* This may happen if the user if stepping very frequently, and is even more likely if they are using both 
-//       * hotkeys and UI buttons. Ignore it in this case. Hopefully, there are no other situations where the user 
-//       * can be trying to step while there are no suspended threads. */
-//    }        
-//  }
-
-  /* Debugger deactivated in DrScala */
-//  /** Disable the automatic trace. Assumes that the debugger is ready. */
-//  private void disableAutomaticTrace() {
-//    if (!isDebuggerEnabled()) return; // debugger isn't used
-//    _log.log("disableAutomaticTrace(): isDebuggerReady() = "+isDebuggerReady()); 
-//    _model.getDebugger().setAutomaticTraceEnabled(false);
-//    _debugPanel.setAutomaticTraceButtonText();
-//    if (_automaticTraceTimer != null) _automaticTraceTimer.stop();
-//  }
-    
-  /* Debugger deactivated in DrScala */
-//  /** Steps in the debugger. */
-//  void debuggerStep(Debugger.StepType type) {
-//    if (isDebuggerReady()) {
-//      try { _model.getDebugger().step(type); }
-//      catch (IllegalStateException ise) {
-//        /* This may happen if the user if stepping very frequently,and is even more likely if they are using both
-//         * hotkeys and UI buttons. Ignore it in this case.  Hopefully, there are no other situations where the user 
-//         * can be trying to step while there are no suspended threads. */
-//      }
-//      catch (DebugException de) {
-//        MainFrameStatics.showError(MainFrame.this, de, "Debugger Error",
-//                                 "Could not create a step request.");
-//      }
-//    }
-//  }
-  
-  /* Debugger deactivated in DrScala */
-//  /** Toggles a breakpoint on the current line. */
-//  void debuggerToggleBreakpoint() {
-//    addToBrowserHistory();
-//    OpenDefinitionsDocument doc = _model.getActiveDocument();
-//    
-//    boolean isUntitled = doc.isUntitled();
-//    if (isUntitled) {
-//      JOptionPane.showMessageDialog(this,
-//                                    "You must save and compile this document before you can\n" +
-//                                    "set a breakpoint in it.",
-//                                    "Must Save and Compile",
-//                                    JOptionPane.ERROR_MESSAGE);
-//      return;
-//    }
-//    
-//    boolean isModified = doc.isModifiedSinceSave();
-//    if (isDebuggerReady() && isModified  && !_currentDefPane.hasWarnedAboutModified() &&
-//        DrScala.getConfig().getSetting(WARN_BREAKPOINT_OUT_OF_SYNC).booleanValue()) {
-//      String message =
-//        "This document has been modified and may be out of sync\n" +
-//        "with the debugger.  It is recommended that you first\n" +
-//        "save and recompile before continuing to use the debugger,\n" +
-//        "to avoid any unexpected errors.  Would you still like to\n" +
-//        "toggle the breakpoint on the specified line?";
-//      String title = "Toggle breakpoint on modified file?";
-//      
-//      ConfirmCheckBoxDialog dialog = new ConfirmCheckBoxDialog(this, title, message);
-//      int rc = dialog.show();
-//      switch (rc) {
-//        case JOptionPane.YES_OPTION:
-//          _currentDefPane.hasWarnedAboutModified(true);
-//          if (dialog.getCheckBoxValue()) {
-//            DrScala.getConfig().setSetting(WARN_BREAKPOINT_OUT_OF_SYNC, Boolean.FALSE);
-//          }
-//          break;
-//          
-//        case JOptionPane.NO_OPTION:
-//          if (dialog.getCheckBoxValue())  DrScala.getConfig().setSetting(WARN_BREAKPOINT_OUT_OF_SYNC, Boolean.FALSE);
-//          return;
-//          
-//        case JOptionPane.CANCEL_OPTION:
-//        case JOptionPane.CLOSED_OPTION:
-//          // do nothing
-//          return;
-//          
-//        default:
-//          throw new RuntimeException("Invalid rc from showConfirmDialog: " + rc);
-//      }
-//    }
-//    
-//    try {
-//      Debugger debugger = _model.getDebugger();
-//      boolean breakpointSet = 
-//        debugger.toggleBreakpoint(doc, _currentDefPane.getCaretPosition(), true);
-//      if (breakpointSet) showBreakpoints();
-//    }
-//    catch (DebugException de) {
-//      MainFrameStatics.showError(MainFrame.this, de, "Debugger Error", "Could not set a breakpoint at the current line.");
-//    }
-//  }
-  
-  
-//  private void _getText(String name) { _field = name; }
-  
-//  /** Adds a watch to a given variable or field. */
-//  void debuggerAddWatch() {
-//    if (isDebuggerReady()) {
-//      //final String field;
-//      OpenDefinitionsDocument doc = _model.getActiveDocument();
-//      final JDialog getFieldDialog = new JDialog(this, "Choose Field to be Watched", true);
-//      //getFieldDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-//      final JTextField fieldName = new JTextField();
-//      getFieldDialog.setSize(new Dimension(150, 60));
-//      getFieldDialog.getContentPane().add(fieldName);
-//      fieldName.addActionListener(new ActionListener() {
-//        public void actionPerformed(ActionEvent ae) {
-//          _getText(fieldName.getText());
-//          getFieldDialog.dispose();
-//        }
-//      });
-//      getFieldDialog.setLocation(300,300);
-//      getFieldDialog.show();
-//      Debugger debugger = _model.getDebugger();
-//      debugger.addWatch(_field);
-//    }
-//  }
-  
-//  /** Displays all breakpoints currently set in the debugger. */
-//  void _printBreakpoints() { _model.getDebugger().printBreakpoints(); }
-  
-  
-  /* Debugger is deactivated in DrScala */
-//  /** Clears all breakpoints from the debugger. */
-//  void debuggerClearAllBreakpoints() {
-//    _model.getBreakpointManager().clearRegions();
-//  }
   
   void _showFileMovedError(FileMovedException fme) {
     try {
@@ -6168,29 +5687,13 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     _setUpAction(_saveConsoleCopyAction, "Save Copy of Console...",
                  "SaveAs", "Save copy of console contents to a file");
     _setUpAction(_clearConsoleAction, "Clear Console", "Clear all text in the Console Pane");
-//    _setUpAction(_showDebugConsoleAction, "Show DrScala Debug Console", "<html>Show a console for debugging DrScala<br>" +
-//                 "(with \"mainFrame\", \"model\", and \"config\" variables defined)</html>");
-    
-    /* Debugger is deactivated in DrScala */
-//    if (_model.getDebugger().isAvailable()) {
-//      _setUpAction(_toggleDebuggerAction, "Debug Mode", "Enable or disable DrScala's debugger");
-//      _setUpAction(_toggleBreakpointAction, "Toggle Breakpoint", "Set or clear a breakpoint on the current line");
-//      _setUpAction(_clearAllBreakpointsAction, "Clear Breakpoints", "Clear all breakpoints in all classes");
-//      _setUpAction(_resumeDebugAction, "Resume", "Resume the current suspended thread");
-//      _setUpAction(_automaticTraceDebugAction, "Automatic Trace", "Automatically trace through entire program");
-//      _setUpAction(_stepIntoDebugAction, "Step Into", "Step into the current line or method call");
-//      _setUpAction(_stepOverDebugAction, "Step Over", "Step over the current line or method call");
-//      _setUpAction(_stepOutDebugAction, "Step Out", "Step out of the current method");
-//      _setUpAction(_breakpointsPanelAction, "Breakpoints", "Display the breakpoints panel");
-//    }
-    
+  
     _setUpAction(_helpAction, "Help", "Show documentation on how to use DrScala");
     _setUpAction(_quickStartAction, "Help", "View Quick Start Guide for DrScala");
     _setUpAction(_aboutAction, "About", "About DrScala");
     _setUpAction(_checkNewVersionAction, "Check for New Version", "Find", "Check for New Version");
     _checkNewVersionAction.setEnabled(DrScala.getConfig().getSetting(OptionConstants.NEW_VERSION_ALLOWED));
-//    _setUpAction(_drjavaSurveyAction, "Send System Information", "About", 
-//                 "Send anonymous system information to DrScala developers");
+
     _setUpAction(_errorsAction, "DrScala Errors", "drscalaerror", "Show a window with internal DrScala errors");
     _setUpAction(_forceQuitAction, "Force Quit", "Stop", "Force DrScala to quit without cleaning up");
     _setUpAction(_generateCustomDrScalaJarAction, "Generate Custom drscala.jar...",
@@ -7759,29 +7262,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   private void _setUpPanes() {
     // DefinitionsPane
 //    JScrollPane defScroll = _defScrollPanes.get(_model.getActiveDocument());
-    
-    /* Debugger is deactivated in DrScala */
-//    // Try to create debug panel (see if JSwat is around)
-//    if (_showDebugger) {
-//      try {
-//        // Set the panel's size.
-//        int debugHeight = DrScala.getConfig().getSetting(DEBUG_PANEL_HEIGHT).intValue();
-//        Dimension debugMinSize = _debugPanel.getMinimumSize();
-//        
-//        // TODO: check bounds compared to entire window.
-//        if ((debugHeight > debugMinSize.height)) debugMinSize.height = debugHeight;
-//        _debugPanel.setPreferredSize(debugMinSize);
-//      }
-//      catch(NoClassDefFoundError e) {
-//        // Don't use the debugger
-//        _showDebugger = false;
-//      }
-//    } 
-    
-    /* Debugger is deactivated in DrScala */   
-//    _debugSplitPane.setBottomComponent(_debugPanel);
-//    _debugSplitPane.setResizeWeight(1.0);
-        
+   
     _mainSplit.setResizeWeight(1.0);
 
     getContentPane().add(_mainSplit, BorderLayout.CENTER);
@@ -7796,9 +7277,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     _mainSplit.setDividerLocation(_mainSplit.getHeight() - 132);
 //    _mainSplit.setDividerLocation(_mainSplit.getHeight() - tabHeight);
     _mainSplit.setOneTouchExpandable(true);
-    
-    /* Debugger deactivated in DrScala */
-//    _debugSplitPane.setOneTouchExpandable(true);
     
     int docListWidth = DrScala.getConfig().getSetting(DOC_LIST_WIDTH).intValue();
     
@@ -8071,18 +7549,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     }
   }
   
-//  /** Revalidate the line numers, i.e. also redraw the ones not currently visible. */
-//  public void revalidateLineNums() {
-//    if (DrScala.getConfig().getSetting(LINEENUM_ENABLED).booleanValue()) {
-//      JScrollPane sp = _defScrollPanes.get(_model.getActiveDocument());
-//      if (sp != null) {
-//        LineEnumRule ler = (LineEnumRule)sp.getRowHeader().getView();
-//        ler.revalidate();
-//        _repaintLineNums();
-//      }
-//    }
-//  }
-  
   /** Update the row header (line number enumeration) for the definitions scroll pane. */
   private void _updateDefScrollRowHeader() {
     boolean ruleEnabled = DrScala.getConfig().getSetting(LINEENUM_ENABLED).booleanValue();
@@ -8105,35 +7571,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
       _currentLocationHighlight = null;
     }
   }
-  
-    /* Debugger deactivated in DrScala */
-//  /** Disable any step timer. */
-//  private void _disableStepTimer() {
-//    synchronized(_debugStepTimer) { if (_debugStepTimer.isRunning()) _debugStepTimer.stop(); }
-//  }
-//  
-//  /** Checks if debugPanel's status bar displays the DEBUGGER_OUT_OF_SYNC message but the current document is 
-//    * in sync.  Clears the debugPanel's status bar in this case.  Does not assume that frame is in debug mode.
-//    * Must be executed in event thread.
-//    */
-//  private void _updateDebugStatus() {
-//    boolean debuggerReady = isDebuggerReady();
-//    _guiAvailabilityNotifier.ensureAvailabilityIs(GUIAvailabilityListener.ComponentType.DEBUGGER, debuggerReady);
-//    if (!debuggerReady) { return; }
-//    
-//    // if the document is untitled, don't show that it is out of sync since it can't be debugged anyway
-//    if (_model.getActiveDocument().isUntitled() || _model.getActiveDocument().getClassFileInSync()) {
-//      // Hide message
-//      if (_debugPanel.getStatusText().equals(DEBUGGER_OUT_OF_SYNC)) _debugPanel.setStatusText("");
-//    } 
-//    else {
-//      // Show message
-//      if (_debugPanel.getStatusText().equals("")) {
-//        _debugPanel.setStatusText(DEBUGGER_OUT_OF_SYNC);
-//      }
-//    }
-//    _debugPanel.repaint();  // display the updated panel
-//  }
   
   /** Ensures that the interactions pane is not editable during an interaction. */
   protected void _disableInteractionsPane() {
@@ -8217,7 +7654,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
   /** Called when a specific document and offset should be displayed. Must be executed only in the event thread.
     * @param doc Document to display
     * @param offset Offset to display
-    * @param shouldHighlight true iff the line should be highlighted.  Only done in debugger.
+    * @param shouldHighlight true iff the line should be highlighted.  Formerly done in debugger.
     */
   public void scrollToDocumentAndOffset(final OpenDefinitionsDocument doc, final int offset, 
                                         final boolean shouldHighlight) {
@@ -8293,15 +7730,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
             });
           }
         }
-        
-        /* Debugger deactivated in DrScala */
-//        if (_showDebugger) {
-//          // Give the interactions pane focus so we can debug
-//          _interactionsPane.requestFocusInWindow();
-////          System.err.println("Showing Interactions Tab" );
-////          showTab(_interactionsContainer); // disabled to avoid switch to interactions when browsing findall results
-//          _updateDebugStatus();
-//        }
       }
     };
     
@@ -8329,102 +7757,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
             (_model.getBuildDirectory() != null) &&
             (_model.getBuildDirectory() != FileOps.NULL_FILE));
   }
-  /* Debugger is deactivated in DrScala */
-//  /** Listens to events from the debugger. */
-//  private class UIDebugListener implements DebugListener {
-//    /* Must be executed in evevt thread.*/
-//    public void debuggerStarted() { EventQueue.invokeLater(new Runnable() { public void run() { showDebugger(); } }); }
-//    
-//    /* Must be executed in event thread.*/
-//    public void debuggerShutdown() {
-//      EventQueue.invokeLater(new Runnable() {
-//        public void run() {
-//          _disableStepTimer();
-//          hideDebugger();
-//          removeCurrentLocationHighlight();
-//        }
-//      } );
-//    }                        
-//    
-//    /** Called when a step is requested on the current thread.  Must be executed in event thread. */
-//    public void stepRequested() {
-//      // Print a message if step takes a long time; timer must be restarted on every step (automatic trace)
-//      synchronized(_debugStepTimer) { 
-//        // only print the stepping message if we're not doing automatic trace
-//        // i.e. do it if the _automaticTraceTimer is null, or if the _automaticTraceTimer is not running
-//        if ((_automaticTraceTimer == null) || (! _automaticTraceTimer.isRunning())) {
-//          if (! _debugStepTimer.isRunning()) _debugStepTimer.start();
-//          else _debugStepTimer.restart();
-//        }
-//      }
-//    }
-//    
-//    public void currThreadSuspended() {
-//      assert EventQueue.isDispatchThread();
-//      _disableStepTimer();
-//      _setThreadDependentDebugMenuItems(true);
-//      _model.getInteractionsModel().autoImport();               
-//      if(_model.getDebugger().isAutomaticTraceEnabled()) {
-//        //System.out.println("new _automaticTraceTimer AUTO_STEP_RATE=" + AUTO_STEP_RATE + ", " + 
-//        //                   System.identityHashCode(_automaticTraceTimer);                                
-//        if ((_automaticTraceTimer != null) && (! _automaticTraceTimer.isRunning())) _automaticTraceTimer.start();
-//      }
-//    }
-//    
-//    /* Must be executed in the event thread. */
-//    public void currThreadResumed() {
-//      _setThreadDependentDebugMenuItems(false);
-//      removeCurrentLocationHighlight();
-//    }    
-//    
-//    /** Called when the given line is reached by the current thread in the debugger, to request that the line be 
-//      * displayed.  Must be executed only in the event thread.
-//      * @param doc Document to display
-//      * @param lineNumber Line to display or highlight
-//      * @param shouldHighlight true iff the line should be highlighted.
-//      */
-//    public void threadLocationUpdated(OpenDefinitionsDocument doc, int lineNumber, boolean shouldHighlight) {
-//      scrollToDocumentAndOffset(doc, doc._getOffset(lineNumber), shouldHighlight); 
-//    }
-//    
-//    /* Must be executed in event thread. */
-//    public void currThreadDied() {
-//      assert EventQueue.isDispatchThread();
-//      _model.getDebugger().setAutomaticTraceEnabled(false);
-//      if (_automaticTraceTimer != null) {
-//        _automaticTraceTimer.stop();
-//      }
-//      _disableStepTimer();
-//      if (isDebuggerReady()) {
-//        try {        
-//          if (!_model.getDebugger().hasSuspendedThreads()) {
-//            // no more suspended threads, resume default debugger state
-//            // all thread dependent debug menu items are disabled
-//            _setThreadDependentDebugMenuItems(false);
-//            removeCurrentLocationHighlight();
-//            // Make sure we're at the prompt
-//            // (This should really be fixed in InteractionsController, not here.)
-//            _interactionsController.moveToPrompt(); // there are no suspended threads, bring back prompt
-//          }
-//        }
-//        catch (DebugException de) {
-//          MainFrameStatics.showError(MainFrame.this, de, "Debugger Error", "Error with a thread in the debugger.");
-//        }
-//      }
-//    }
-//    
-//    public void currThreadSet(DebugThreadData dtd) { }
-//    public void regionAdded(final Breakpoint bp) { }
-//    public void breakpointReached(Breakpoint bp) {
-//      showTab(_interactionsContainer, true);
-//    }
-//    public void regionChanged(Breakpoint bp) {  }
-//    public void regionRemoved(final Breakpoint bp) { }    
-//    public void watchSet(final DebugWatchData w) { }
-//    public void watchRemoved(final DebugWatchData w) { }
-//    public void threadStarted() { }
-//    public void nonCurrThreadDied() { }
-//  }
+ 
   
   /** @author jlugo */
   private class DJAsyncTaskLauncher extends AsyncTaskLauncher {
@@ -8931,8 +8264,8 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     /** Only runs in event thread. */
     public void junitStarted() {
       assert EventQueue.isDispatchThread();
-      /* Note: hourglassOn() is done by various junit commands (other than junitClasses); hourglass must be off 
-       * for actual testing; the balancing simpleHourglassOff() is located here and in nonTestCase */
+      /* Note: hourglassOn() is done by various junit commands; hourglass must be off for actual testing; the balancing
+       * simpleHourglassOff() is located here and in nonTestCase */
       
       try { showTab(_junitPanel, true);
         _junitPanel.setJUnitInProgress();
@@ -8942,17 +8275,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
         hourglassOff();
       }  
     }
-    
-    /** We are junit'ing a specific list of classes given their source files. */
-    public void junitClassesStarted() {
-      assert EventQueue.isDispatchThread();
-      // Only change GUI from event-dispatching thread
-      // new ScrollableDialog(null, "junitClassesStarted called in MainFrame", "", "").show();
-      showTab(_junitPanel, true);
-      _junitPanel.setJUnitInProgress();
-    }
-    
-    //public void junitRunning() { }
     
     public void junitSuiteStarted(final int numTests) {
       assert EventQueue.isDispatchThread();
@@ -10246,9 +9568,6 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
             MainFrame.this.removeWindowListener(this);
             _tabbedPanesFrame.removeWindowListener(this);
             
-              /* Debugger deactivated in DrScala */
-//            if (_debugFrame != null) _debugFrame.removeWindowListener(this);
-            
             // if the window that lost focus because of a native application window
             // is still the modal window adapter owner, put it back in front
             if (_modalWindowAdapterOwner==w) {
@@ -10272,10 +9591,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
             // windows are the biggest windows.
             MainFrame.this.addWindowListener(regainFrontAfterNative);
             _tabbedPanesFrame.addWindowListener(regainFrontAfterNative);
-            
-            /* Debugger deactivated in DrScala */
-//            if (_debugFrame != null) _debugFrame.addWindowListener(regainFrontAfterNative);
-            
+        
             return;
           }
           if (opposite instanceof Dialog) {

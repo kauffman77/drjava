@@ -906,7 +906,7 @@ public abstract class GlobalModelTestCase extends MultiThreadedTestCase {
     public void saveBeforeCompile() { listenerFail("saveBeforeCompile fired unexpectedly"); }
     
     public void junitStarted() { listenerFail("junitStarted fired unexpectedly"); }
-    public void junitClassesStarted() { listenerFail("junitAllStarted fired unexpectedly"); }
+//    public void junitClassesStarted() { listenerFail("junitAllStarted fired unexpectedly"); }
     public void junitSuiteStarted(int numTests) { listenerFail("junitSuiteStarted fired unexpectedly"); }
     public void junitTestStarted(String name) { listenerFail("junitTestStarted fired unexpectedly"); }
     public void junitTestEnded(String name, boolean wasSuccessful, boolean causedError) {

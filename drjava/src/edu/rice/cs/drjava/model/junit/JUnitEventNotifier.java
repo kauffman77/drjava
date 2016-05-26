@@ -111,12 +111,12 @@ class JUnitEventNotifier extends EventNotifier<JUnitListener> implements JUnitLi
     finally { _lock.endRead(); }
   }
   
-  /** Called after junitClasses is started by the GlobalModel. */
-  public void junitClassesStarted() {
-    _lock.startRead();
-    try { for (JUnitListener jul : _listeners) { jul.junitClassesStarted(); } }
-    finally { _lock.endRead(); }
-  }
+//  /** Called after junitClasses is started by the GlobalModel. */
+//  public void junitClassesStarted() {
+//    _lock.startRead();
+//    try { for (JUnitListener jul : _listeners) { jul.junitClassesStarted(); } }
+//    finally { _lock.endRead(); }
+//  }
   
   /** Called to indicate that a suite of tests has started running.
     * @param numTests The number of tests in the suite to be run.
