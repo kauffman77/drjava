@@ -269,11 +269,12 @@ public class ScalaCompiler extends Javac160FilteringCompiler implements /* Scala
     
     ConsoleReporter reporter = new DrScalaReporter(errors);
 
-    // Create a Settings object that captures the Java class path as the Scala class path!
+    // Create a Settings object that captures the Java class path as the Scala class path!  No longer necessary?
     Settings settings = reporter.settings();
     
 //    settings.processArgumentString("-usejavacp");
     settings.processArgumentString("-deprecation");
+    settings.processArgumentString("-feature");
     String dest = (destination == null) ? null : destination.getPath();
     System.err.println("In ScalaCompiler, dest = '" + dest + "'");
     if (dest != null) {

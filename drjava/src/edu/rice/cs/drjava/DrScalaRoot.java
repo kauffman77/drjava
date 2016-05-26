@@ -71,21 +71,14 @@ import static edu.rice.cs.plt.debug.DebugUtil.debug;
 /** Main class for DrJava.
   * @version $Id: DrScalaRoot.java 5668 2012-08-15 04:58:30Z rcartwright $
   */
-public class DrScalaRoot { 
-  
-  /* Debugger deactivated in DrScala */
-//  /** Class to probe to see if the debugger is available */
-//  public static final String TEST_DEBUGGER_CLASS = "com.sun.jdi.Bootstrap";
+public class DrScalaRoot {
   
   public static final String PLASTIC_THEMES_PACKAGE = "com.jgoodies.looks.plastic.theme";
   
   private static final PrintStream _consoleOut = System.out;
   private static final PrintStream _consoleErr = System.err;
-  
-//  /** This field is only used in the instance of this class in the Interpreter JVM. */
-  
-//  private static volatile SimpleInteractionsWindow _debugConsole = null;
-  
+  /** The preceding two fields are only used in the instance of this class in the Interpreter JVM. */
+
   private static volatile boolean anyLineNumbersSpecified = false;
   
   /** Main frame of this DrScala instance. */
@@ -112,7 +105,7 @@ public class DrScalaRoot {
     
     /* files to open held in filesToOpen[0:numFiles-1] which may be an initial segment of filesToOpen */
     
-    /* In some unit test cases, creating a MainFrame in the main thread generated index out of bounds exceptions.  It appear that this
+    /* In some unit test cases, creating a MainFrame in the main thread generated index out of bounds exceptions.  It appears that this
      * creation process generates some swing events that are processed by the event thread.  Hence we need to create the MainFrame in
      * the event thread.
      */
@@ -152,8 +145,8 @@ public class DrScalaRoot {
         UIManager.setLookAndFeel(configLAFName);
       }
       
-      // The MainFrame *must* be constructed after the compiler setup process has
-      // occurred; otherwise, the list of compilers in the UI will be wrong.
+      /* The MainFrame *must* be constructed after the compiler setup process has occurred; otherwise, the list of 
+       * compilers in the UI will be wrong. */
       
 //      Utilities.showDebug("Creating MainFrame");
       _mainFrame = new MainFrame();
@@ -168,7 +161,7 @@ public class DrScalaRoot {
        * a NullPointerException on start up when specifying a file (ex: java -jar drjava.jar somefile.java)
        */
       EventQueue.invokeLater(new Runnable(){ 
-        public void run(){ 
+        public void run() { 
           _mainFrame.start();
           
           // now open the files specified on the command line. must be done here
@@ -187,10 +180,6 @@ public class DrScalaRoot {
       System.setErr(new PrintStream(new OutputStreamRedirector() {
         public void print(String s) { _mainFrame.getModel().systemErrPrint(s); }
       }));
-      
-//      Utilities.showDebug("showDebugConsole flag = " + DrJava.getShowDebugConsole());
-      // Show debug console if enabled; disabled in DrScala
-//      if (DrScala.getShowDebugConsole()) showDrJavaDebugConsole(_mainFrame);
     }
     catch(Throwable t) {
       error.log(t);
@@ -203,7 +192,7 @@ public class DrScalaRoot {
   }
   
   /** Handle the list of files specified on the command line.  Feature request #509701.
-    * If file exists, open it in DrJava.  Otherwise, ignore it.
+    * If a file exists, open it in DrJava.  Otherwise, ignore it.
     * Is there a better way to handle nonexistent files?  Dialog box, maybe?
     */
   static void openCommandLineFiles(final MainFrame mf, final String[] filesToOpen, boolean jump) { 

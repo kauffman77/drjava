@@ -93,7 +93,7 @@ import static edu.rice.cs.drjava.config.OptionConstants.*;
 public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   
   /** log for use in debugging */
-  private static Log _log = new Log("GlobalModel.txt", true);
+  private static Log _log = new Log("GlobalModel.txt", false);
   
   /** Manages listeners to this model. */
   private final JUnitEventNotifier _notifier = new JUnitEventNotifier();
@@ -420,8 +420,8 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
                   _log.log("**** class name = " + className.value() + " ****");
                 }
                 public void visitSource(String source, String debug) {
-                  _log.log("**** sourceName = " + source + " ****");
                   sourceName.set(source);
+                  _log.log("**** sourceName = " + sourceName.value() + " ****");
                 }
                 
                 public void visitOuterClass(String owner, String name, String desc) { }
