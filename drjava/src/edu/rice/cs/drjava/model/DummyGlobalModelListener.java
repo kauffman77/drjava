@@ -107,9 +107,6 @@ public class DummyGlobalModelListener extends DummyInteractionsListener implemen
   /** Called after JUnit is started by the GlobalModel. */
   public void junitStarted() { }
   
-//  /** Called when testing all files. */
-//  public void junitClassesStarted() {  }
-  
   /** Called to indicate that a suite of tests has started running.
     * @param numTests The number of tests in the suite to be run.
     */

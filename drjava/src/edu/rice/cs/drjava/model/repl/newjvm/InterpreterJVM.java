@@ -68,22 +68,6 @@ import edu.rice.cs.drjava.model.repl.InteractionsPaneOptions;
 
 import edu.rice.cs.util.swing.Utilities;
 
-//import edu.rice.cs.dynamicjava.Options;
-
-/* Most of these imports involve debugger code that I don't think works in DrScala. */
-//import edu.rice.cs.dynamicjava.interpreter.ClassContext;
-//import edu.rice.cs.dynamicjava.interpreter.ClassSignatureContext;
-//import edu.rice.cs.dynamicjava.interpreter.DelegatingContext;
-//import edu.rice.cs.dynamicjava.interpreter.EvaluatorException;  // moved to this package
-//import edu.rice.cs.dynamicjava.interpreter.ImportContext;
-//import edu.rice.cs.dynamicjava.interpreter.InterpreterException;  // moved to this package
-//import edu.rice.cs.dynamicjava.interpreter.LocalContext;
-//import edu.rice.cs.dynamicjava.interpreter.RuntimeBindings;
-//import edu.rice.cs.dynamicjava.interpreter.TypeContext;
-//import edu.rice.cs.dynamicjava.symbol.DJClass;
-//import edu.rice.cs.dynamicjava.symbol.SymbolUtil;  // no longer used
-//import edu.rice.cs.dynamicjava.symbol.LocalVariable;
-//import edu.rice.cs.dynamicjava.symbol.type.Type;
 
 // For Windows focus fix
 import javax.swing.JDialog;

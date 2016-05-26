@@ -62,9 +62,6 @@ public interface JUnitListener {
   /** Called after JUnit is started by the GlobalModel. */
   public void junitStarted();
   
-//  /** Called when testing a specific list of classes given their source files. */
-//  public void junitClassesStarted();
-  
   /** Called to indicate that a suite of tests has started running.
     * @param numTests The number of tests in the suite to be run.
     */

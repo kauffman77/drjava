@@ -462,7 +462,8 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
         
         synchronized(_compilerModel.getCompilerLock()) {
           // synchronized over _compilerModel to ensure that compilation and junit testing are mutually exclusive.
-          /** Set up junit test suite on slave JVM; get TestCase classes forming that suite */
+          /** Set up junit test suite on slave JVM; get TestCase classes forming that suite.  The computation of TestCase classes
+            * is done in the slave JVM. */
           List<String> tests = _jvm.findTestClasses(classNames, files).unwrap(null);  // findTestClasses returns Option<List<String>>
 //          Utilities.show("found tests " + tests);
           _log.log("tests = " + tests);

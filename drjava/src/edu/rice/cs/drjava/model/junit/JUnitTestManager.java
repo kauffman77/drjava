@@ -96,6 +96,7 @@ public class JUnitTestManager {
   
   /** Find the test classes among the given classNames and accumulate them in
     * TestSuite for junit.  Returns null if a test suite is already pending.
+    * This method runs in the slave JVM!  It is called by InterpreterJVM.
     * @param classNames the class names that are test class candidates
     * @param files the files corresponding to classNames
     */

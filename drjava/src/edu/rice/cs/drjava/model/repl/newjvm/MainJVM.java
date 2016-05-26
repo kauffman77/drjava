@@ -487,8 +487,9 @@ public class MainJVM extends AbstractMasterJVM implements MainJVMRemoteI {
     catch (RemoteException e) { _handleRemoteException(e); return Option.none(); }
   }
   
-  /** Sets up a JUnit test suite in the Interpreter JVM and finds which classes are really TestCase
-    * classes (by loading them).  Blocks until the interpreter is connected and the operation completes.
+  /** Sets up a JUnit test suite in the Interpreter JVM and finds which classes are really TestCase classes (by 
+    * loading them).  The actual computation is done in the slave JVM.  Returns Option.none() if the interpreter is 
+    * not connected or the slave JVM is busy.
     * @param classNames the class names to run in a test
     * @param files the associated file
     * @return the class names that are actually test cases
