@@ -68,7 +68,7 @@ import static edu.rice.cs.plt.debug.DebugUtil.error;
   */
 public class JUnitTestManager {
  
-  protected static final Log _log = new Log("GlobalModel.txt", false);
+  protected static final Log _log = new Log("GlobalModel.txt", true);
   
   /** The interface to the master JVM via RMI. */
   private final JUnitModelCallback _jmc;
@@ -94,9 +94,8 @@ public class JUnitTestManager {
     _loaderFactory = loaderFactory;
   }
   
-  /** Find the test classes among the given classNames and accumulate them in
-    * TestSuite for junit.  Returns null if a test suite is already pending.
-    * This method runs in the slave JVM!  It is called by InterpreterJVM.
+  /** Find the test classes among the given classNames and accumulate them in TestSuite for junit.  Returns null if a 
+    * test suite is already pending. This method runs in the slave JVM!  It is called by InterpreterJVM.
     * @param classNames the class names that are test class candidates
     * @param files the files corresponding to classNames
     */
@@ -137,8 +136,8 @@ public class JUnitTestManager {
     return _testClassNames;
   }
   
-  /** Runs the pending test suite set up by the preceding call to findTestClasses.  Runs in a single auxiliary thread,
-    * so no need for explicit synchronization.
+  /** Runs the pending test suite set up by the preceding call to findTestClasses.  Runs in a single auxiliary thread on
+    * the slave JVM (!), so no need for explicit synchronization.
     * @return false if no test suite (even an empty one) has been set up
     */
   @SuppressWarnings("unchecked")
@@ -209,10 +208,10 @@ public class JUnitTestManager {
 
     boolean result = (Test.class.isAssignableFrom(c) && !Modifier.isAbstract(c.getModifiers()) && 
                       !Modifier.isInterface(c.getModifiers()) ||
-      (new JUnit4TestAdapter(c).getTests().size()>0)) && 
+      (new JUnit4TestAdapter(c).getTests().size() > 0)) && 
       ! new JUnit4TestAdapter(c).getTests().get(0).toString().contains("initializationError")
       ; //The specific check for initializationError detect when a class contains no tests
-    debug.logValues(new String[]{"c", "isJUnitTest(c)"}, c, result);
+    _log.log("TestClassIsAssignableFrom = " + Test.class.isAssignableFrom(c)  + " result = " + result);
     return result;
   }
   

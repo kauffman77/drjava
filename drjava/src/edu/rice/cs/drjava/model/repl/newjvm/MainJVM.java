@@ -501,7 +501,7 @@ public class MainJVM extends AbstractMasterJVM implements MainJVMRemoteI {
       _log.log("***** In MainJVM.findTestClasses, remote is either null or busy, so no test classes are found");
       return Option.none(); 
     }
-    try { 
+    try {
       _log.log("***** In MainJVM.findTestClasses, forwarding method call to remote");
       return Option.some(remote.findTestClasses(classNames, files)); 
     }
