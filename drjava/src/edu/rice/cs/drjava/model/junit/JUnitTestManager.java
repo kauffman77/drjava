@@ -39,23 +39,27 @@ package edu.rice.cs.drjava.model.junit;
 import junit.framework.*;
 
 import java.io.File;
+
+import java.lang.reflect.Modifier;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import edu.rice.cs.util.Log;
-import edu.rice.cs.util.StringOps;
-import edu.rice.cs.util.UnexpectedException;
-import edu.rice.cs.util.swing.Utilities;
-import edu.rice.cs.util.classloader.ClassFileError;
+import edu.rice.cs.drjava.model.repl.newjvm.ClassPathManager;
+
 import edu.rice.cs.plt.io.IOUtil;
 import edu.rice.cs.plt.lambda.Lambda;
 import edu.rice.cs.plt.tuple.Pair;
 import edu.rice.cs.plt.iter.IterUtil;
 import edu.rice.cs.plt.reflect.ShadowingClassLoader;
 
-import java.lang.reflect.Modifier;
+import edu.rice.cs.util.Log;
+import edu.rice.cs.util.StringOps;
+import edu.rice.cs.util.UnexpectedException;
+import edu.rice.cs.util.swing.Utilities;
+import edu.rice.cs.util.classloader.ClassFileError;
 
 import static edu.rice.cs.plt.debug.DebugUtil.debug;
 import static edu.rice.cs.plt.debug.DebugUtil.error;
@@ -68,13 +72,13 @@ import static edu.rice.cs.plt.debug.DebugUtil.error;
   */
 public class JUnitTestManager {
  
-  protected static final Log _log = new Log("GlobalModel.txt", true);
+  protected static final Log _log = new Log("GlobalModel.txt", false);
   
   /** The interface to the master JVM via RMI. */
   private final JUnitModelCallback _jmc;
   
-  /** A factory producing a ClassLoader for tests with the given parent */
-  private final Lambda<ClassLoader, ClassLoader> _loaderFactory;
+  /** A factory producing a PathClassLoader for tests with the given parent */
+  private final ClassPathManager _loaderFactory;
   
   /** The current testRunner; initially null.  Each test suite requires a new runner. */
   private JUnitTestRunner _testRunner;
@@ -89,7 +93,7 @@ public class JUnitTestManager {
   private List<File> _testFiles = null;
   
   /** Standard constructor */
-  public JUnitTestManager(JUnitModelCallback jmc, Lambda<ClassLoader, ClassLoader> loaderFactory) {
+  public JUnitTestManager(JUnitModelCallback jmc, ClassPathManager loaderFactory) {
     _jmc = jmc;
     _loaderFactory = loaderFactory;
   }
@@ -107,7 +111,8 @@ public class JUnitTestManager {
     if (_testClassNames != null && ! _testClassNames.isEmpty()) 
       throw new IllegalStateException("Test suite is still pending!");
     
-    _testRunner = makeRunner();
+    // create a new testRunner for this suite of test classes; JUnitTestManager is loaded into the slave JVM!
+    _testRunner = makeRunner(JUnitTestManager.class.getClassLoader());
     
     _testClassNames = new ArrayList<String>();
     _testFiles = new ArrayList<File>();
@@ -173,9 +178,6 @@ public class JUnitTestManager {
         errors[i] = _makeJUnitError(tFail, _testClassNames, false, _testFiles);
         i++;
       }
-//      new ScrollableDialog(null, "Slave JVM: testSuite ended with errors", "", Arrays.toString(errors)).show();
-//      Utilities.show("Finished processing failures");
-//      Utilities.show("errors = " + Arrays.toString(errors));
        
       _reset();
       _jmc.testSuiteEnded(errors);
@@ -378,12 +380,7 @@ public class JUnitTestManager {
   }
   
   /** Make a fresh JUnitTestRunner with its own class loader instance. */
-  private JUnitTestRunner makeRunner() {
-    ClassLoader current = JUnitTestManager.class.getClassLoader();
-    // References to JUnit classes must match those of the current loader so that,
-    // for example, when a test fails, the failure exception is of a class we can talk 
-    // about in the current context.
-    ClassLoader parent = ShadowingClassLoader.whiteList(current, "junit", "org.junit");
-    return new JUnitTestRunner(_jmc, _loaderFactory.value(parent));
+  private JUnitTestRunner makeRunner(ClassLoader current) {
+    return new JUnitTestRunner(_jmc, _loaderFactory.makePathClassLoader(current));
   }
 }

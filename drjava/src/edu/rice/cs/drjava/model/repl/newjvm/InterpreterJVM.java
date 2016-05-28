@@ -124,7 +124,7 @@ public class InterpreterJVM extends AbstractSlaveJVM implements InterpreterJVMRe
     super("Reset Interactions Thread", "Poll DrScala Thread");
     
     _classPathManager = new ClassPathManager(ReflectUtil.SYSTEM_CLASS_PATH);
-    _interpreterLoader = _classPathManager.makeClassLoader(null);
+    _interpreterLoader = _classPathManager.makePathClassLoader(null);
     _junitTestManager = new JUnitTestManager(this, _classPathManager);
 
     // set the thread context class loader, this way NextGen and Mint can use the interpreter's class loader
