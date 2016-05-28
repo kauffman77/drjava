@@ -495,13 +495,6 @@ public class GlobalEventNotifier extends EventNotifier<GlobalModelListener> impl
     finally { _lock.endRead(); }
   }
   
-  /** Called when testing specific list of classes. */
-  public void junitClassesStarted() {
-    _lock.startRead();
-    try { for (GlobalModelListener l : _listeners) { l.junitClassesStarted(); } }
-    finally { _lock.endRead(); }
-  }
-  
   /** Called to indicate that a suite of tests has started running.
     * @param numTests The number of tests in the suite to be run.
     */

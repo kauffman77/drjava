@@ -169,13 +169,14 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   public SwingDocument getJUnitDocument() { return _junitDoc; }
   
   /** Creates a JUnit test suite over all currently open documents and runs it.  If the class file 
-    * associated with a file is not a test case, it is ignored.  
+    * associated with a file is not a test case, it is ignored.  Note: testing may still run after this method returns.
     */
   public void junitAll() { junitDocs(_model.getOpenDefinitionsDocuments()); }
   
   /** Creates a JUnit test suite over all currently open documents and runs it.  If a class file associated with a 
     * source file is not a test case, it will be ignored.  Synchronized against the compiler model to prevent 
-    * testing and compiling at the same time, which would create invalid results.
+    * testing and compiling at the same time, which would create invalid results.  Testing may still be running after
+    * method class returns.
     */
   public void junitProject() {
     LinkedList<OpenDefinitionsDocument> lod = new LinkedList<OpenDefinitionsDocument>();
@@ -186,43 +187,11 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
     junitOpenDefDocs(lod, true);
   }
   
-//  /** Forwards the classnames and files to the test manager to test all of them; does not notify 
-//    * since we don't have ODD's to send out with the notification of junit start.
-//    * @param qualifiedClassnames a list of all the qualified class names to test.
-//    * @param files a list of their source files in the same order as qualified class names.
-//    */
-//  public void junitClasses(List<String> qualifiedClassnames, List<File> files) {
-//    Utilities.showDebug("junitClasses(" + qualifiedClassnames + ", " + files);
-//    synchronized(_compilerModel.getCompilerLock()) {
-//      
-//      // Check _testInProgress 
-//      if (_testInProgress) return;
-//      
-//      List<String> testClasses;
-//      try { testClasses = _jvm.findTestClasses(qualifiedClassnames, files); }
-//      catch(IOException e) { throw new UnexpectedException(e); }
-//      
-////      _log.log("Found test classes: " + testClasses);
-//      
-//      if (testClasses.isEmpty()) {
-//        nonTestCase(true);
-//        return;
-//      }
-//      _notifier.junitClassesStarted();
-//      _testInProgress = true;
-//      try { _jvm.runTestSuite(); } 
-//      catch(Exception e) {
-////        _log.log("Threw exception " + e);
-//        _notifier.junitEnded();
-//        _testInProgress = false;
-//        throw new UnexpectedException(e); 
-//      }
-//    }
-//  }
-  
+  /** Note: testing may still be running when method returns */
   public void junitDocs(List<OpenDefinitionsDocument> lod) { junitOpenDefDocs(lod, true); }
   
-  /** Runs JUnit on the current document.  Forces the user to compile all open documents before proceeding. */
+  /** Runs JUnit on the current document.  Forces the user to compile all open documents before proceeding. fTesting may still be
+    * running when this method returns. */
   public void junit(OpenDefinitionsDocument doc) throws ClassNotFoundException, IOException {
     
     _log.log("junit(doc)");
@@ -246,7 +215,8 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   }
   
   /** Ensures that all documents have been compiled since their last modification and then delegates the actual testing
-    * to _rawJUnitOpenTestDocs. */
+    * to _rawJUnitOpenTestDocs.  Note that testing may be still be running when this method returns.
+    */
   private void junitOpenDefDocs(final List<OpenDefinitionsDocument> lod, final boolean allTests) {
     // If a test is running, don't start another one.
 
@@ -316,6 +286,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
   /** Runs all TestCases in the document list lod; assumes all documents have been compiled. It finds the TestCase 
     * classes by searching the build directories for the documents.  Note: caller must respond to thrown exceptions 
     * by invoking _junitUnitInterrupted (to run hourglassOff() and reset the unit testing UI).
+    * Note: does not wait until this computation (performed in an auxiliary thread) finishes
     */
   private void _rawJUnitOpenDefDocs(List<OpenDefinitionsDocument> lod, final boolean allTests) {
     File buildDir = _model.getBuildDirectory();
@@ -439,6 +410,7 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
               String sourceFileName = getCanonicalPath(rootDir) + File.separator + sourceName.value();
               _log.log("Full source fileName = " + sourceFileName);
               
+              /* What was the following commented out code supposed to accomplish? */
 //              /* The index in fileName of the dot preceding the extension ".java" or ".scala" */
 //              int indexOfExtDot = sourceFileName.lastIndexOf('.');
 //              _log.log("indexOfExtDot = " + indexOfExtDot);
@@ -475,14 +447,12 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
     }
     
     _log.log("files = " + files);
-    /** Run the junit test suite that has already been set up on the slave JVM */
+    /** Run the junit test suite that has already been set up on the slave JVM; runs in auxiliary thread, but not the 
+      * event thread. */
     _testInProgress = true;
      _log.log("Spawning test thread");
     new Thread(new Runnable() { // this thread is not joined, but the wait/notify scheme guarantees that it ends
-      public void run() { 
-        // TODO: should we disable compile commands while testing?  Should we use protected flag instead of lock?
-        // Utilities.show("Preparing to synchronize");
-        
+      public void run() {  
         // The call to findTestClasses had to be moved out of the event thread (bug 2722310)
         // The event thread is still blocked in findTestClasses when JUnit needs to
         // have a class prepared. This invokes EventHandlerThread._handleClassPrepareEvent, which puts a call to
@@ -492,8 +462,9 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
         
         synchronized(_compilerModel.getCompilerLock()) {
           // synchronized over _compilerModel to ensure that compilation and junit testing are mutually exclusive.
-          /** Set up junit test suite on slave JVM; get TestCase classes forming that suite */
-          List<String> tests = _jvm.findTestClasses(classNames, files).unwrap(null);
+          /** Set up junit test suite on slave JVM; get TestCase classes forming that suite.  The computation of TestCase classes
+            * is done in the slave JVM. */
+          List<String> tests = _jvm.findTestClasses(classNames, files).unwrap(null);  // findTestClasses returns Option<List<String>>
 //          Utilities.show("found tests " + tests);
           _log.log("tests = " + tests);
           if (tests == null || tests.isEmpty()) {
@@ -501,18 +472,18 @@ public class DefaultJUnitModel implements JUnitModel, JUnitModelCallback {
             nonTestCase(allTests, false);
             return;
           }
-        }
-        
-        try {
-          // Utilities.show("Starting JUnit");
           
-          _notifyJUnitStarted(); 
-          boolean testsPresent = _jvm.runTestSuite();  // The false return value could be changed to an exception.
-          if (! testsPresent) throw new RemoteException("No unit test classes were passed to the slave JVM");
-        }
-        catch(RemoteException e) { // Unit testing aborted; cleanup; hourglassOff already called in junitStarted
-          _notifyJUnitEnded();  // balances junitStarted()
-          _testInProgress = false;
+          try {
+            // Utilities.show("Starting JUnit");
+            
+            _notifyJUnitStarted(); 
+            boolean testsPresent = _jvm.runTestSuite();  // The false return value could be changed to an exception.
+            if (! testsPresent) throw new RemoteException("No unit test classes were passed to the slave JVM");
+          }
+          catch(RemoteException e) { // Unit testing aborted; cleanup; hourglassOff already called in junitStarted
+            _notifyJUnitEnded();  // balances junitStarted()
+            _testInProgress = false;
+          }
         }
       }
     }).start();

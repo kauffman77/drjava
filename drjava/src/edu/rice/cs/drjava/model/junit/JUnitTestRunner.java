@@ -42,7 +42,7 @@ import junit.framework.*;
 import edu.rice.cs.util.UnexpectedException;
 
 /** DrScala's own testrunner. It updates the document in the JUnit pane as error and failure events are fired.  These methods run in
-  * an auxiliary thread.
+  * an auxiliary thread in the slave JVM (!).
  *  @version $Id: JUnitTestRunner.java 5594 2012-06-21 11:23:40Z rcartwright $
  */
 public class JUnitTestRunner extends BaseTestRunner {

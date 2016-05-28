@@ -52,7 +52,7 @@ import static edu.rice.cs.plt.debug.DebugUtil.debug;
   * may be accessed concurrently.  In some tests and debugging runs,  a single JVM is used 
   * (SimpleInteractionsModel). In this case, the ClassPathManager runs in the main JVM.
   */
-public class ClassPathManager implements Lambda<ClassLoader, ClassLoader> {
+public class ClassPathManager {
   
   // For thread safety, all accesses to these lists are synchronized on this, and when they are made available
   // to others (via getters or in the class loader), a snapshot is used.
@@ -149,13 +149,10 @@ public class ClassPathManager implements Lambda<ClassLoader, ClassLoader> {
     * @param parent  The parent class loader.  May be {@code null}, signifying the bootstrap
     *                class loader.
     */
-  public synchronized ClassLoader makeClassLoader(ClassLoader parent) {
+  public synchronized ClassLoader makePathClassLoader(ClassLoader parent) {
     updateProperty();
     return new PathClassLoader(parent, _fullPath);
   }
-  
-  /** Lambda value method */
-  public ClassLoader value(ClassLoader parent) { return makeClassLoader(parent); }
   
   /** Get a dynamic view of the full class path. */
   public synchronized Iterable<File> getClassPath() { updateProperty(); return _fullPath; }

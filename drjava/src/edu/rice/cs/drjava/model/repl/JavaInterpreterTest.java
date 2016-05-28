@@ -81,7 +81,7 @@ public class JavaInterpreterTest extends DrScalaTestCase {
 //    _interpreter = new DynamicJavaAdapter(new ClassPathManager());
 //    testValue = false;
 //    _classPathManager = new ClassPathManager(ReflectUtil.SYSTEM_CLASS_PATH);
-//    _interpreterLoader = _classPathManager.makeClassLoader(null);
+//    _interpreterLoader = _classPathManager.makePathClassLoader(null);
 //    
 //    // _interpreterOptions = Options.DEFAULT;
 //    _interpreterOptions = new InteractionsPaneOptions();
