@@ -6,3 +6,4 @@ DrScala, which we will release as soon as we can persuade the Scala developers t
 command which we use to dynamically add new paths to the REPL class path.  We will continue to distribute new releases of
 DrJava via Sourceforge to preserve our distribution interface.  The move from Subversion on Sourceforge to Git on Github
 only concerns DrJava developers and others interested in the DrJava code base.
+
