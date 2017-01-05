@@ -43,6 +43,8 @@ import edu.rice.cs.drjava.model.junit.JUnitErrorModel;
 import edu.rice.cs.util.UnexpectedException;
 import edu.rice.cs.util.swing.BorderlessScrollPane;
 import edu.rice.cs.util.swing.RightClickMouseAdapter;
+import edu.rice.cs.drjava.DrJava;
+import edu.rice.cs.drjava.config.OptionConstants;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -66,7 +68,9 @@ public class JUnitPanel extends ErrorPanel {
   private static final SimpleAttributeSet OUT_OF_SYNC_ATTRIBUTES = _getOutOfSyncAttributes();
   private static final SimpleAttributeSet _getOutOfSyncAttributes() {
     SimpleAttributeSet s = new SimpleAttributeSet();
-    s.addAttribute(StyleConstants.Foreground, Color.red.darker());
+    s.addAttribute(StyleConstants.Foreground,
+                   DrJava.getConfig().getSetting(OptionConstants.JUNIT_FAIL_COLOR).darker());
+                   //Color.red.darker());
     s.addAttribute(StyleConstants.Bold, Boolean.TRUE);
     return s;
   }
@@ -74,14 +78,18 @@ public class JUnitPanel extends ErrorPanel {
   private static final SimpleAttributeSet TEST_PASS_ATTRIBUTES = _getTestPassAttributes();
   private static final SimpleAttributeSet _getTestPassAttributes() {
     SimpleAttributeSet s = new SimpleAttributeSet();
-    s.addAttribute(StyleConstants.Foreground, Color.green.darker());
+    s.addAttribute(StyleConstants.Foreground, 
+                   DrJava.getConfig().getSetting(OptionConstants.JUNIT_PASS_COLOR));
+                   //Color.green.darker());
     return s;
   }
   
   private static final SimpleAttributeSet TEST_FAIL_ATTRIBUTES = _getTestFailAttributes();
   private static final SimpleAttributeSet _getTestFailAttributes() {
     SimpleAttributeSet s = new SimpleAttributeSet();
-    s.addAttribute(StyleConstants.Foreground, Color.red);
+    s.addAttribute(StyleConstants.Foreground,
+                   DrJava.getConfig().getSetting(OptionConstants.JUNIT_FAIL_COLOR));
+                   //Color.red);
     return s;
   }
   
@@ -219,6 +227,16 @@ public class JUnitPanel extends ErrorPanel {
     private boolean _warnedOutOfSync;
     private static final String JUNIT_WARNING = "junit.framework.TestSuite$1.warning";
     
+    @Override
+    protected void _insertErrorText(DJError error, ErrorDocument doc) throws BadLocationException {
+      // Show file and line number
+      JUnitError currentError = (JUnitError) error;
+      String testName = currentError.testName();
+      doc.append("Test: ", BOLD_ATTRIBUTES);
+      //String fileAndLineNumber = error.getFileMessage() + "  [line: " + error.getLineMessage() + "]";
+      doc.append(testName + "\n", NORMAL_ATTRIBUTES);
+      super._insertErrorText(error,doc);
+  }
     /** Maps any test names in the currently running suite to the position that they appear in the list pane. */
     private final HashMap<String, Position> _runningTestNamePositions;
     
@@ -299,8 +317,8 @@ public class JUnitPanel extends ErrorPanel {
       ErrorDocument doc = getErrorDocument();
       Position namePos = _runningTestNamePositions.get(fullName);
       AttributeSet set;
-      if (! wasSuccessful || causedError) set = TEST_FAIL_ATTRIBUTES;
-      else set = TEST_PASS_ATTRIBUTES;
+      if (! wasSuccessful || causedError) set = _getTestFailAttributes();
+      else set = _getTestPassAttributes();
       if (namePos != null) {
         int index = namePos.getOffset();
         int length = testName.length();
@@ -541,10 +559,12 @@ public class JUnitPanel extends ErrorPanel {
     
     private Color getStatusColor() {
       if (_hasError) {
-        return Color.red;
+        return DrJava.getConfig().getSetting(OptionConstants.JUNIT_FAIL_COLOR);
+        // return Color.red;
       }
       else {
-        return Color.green;
+        return DrJava.getConfig().getSetting(OptionConstants.JUNIT_PASS_COLOR);
+        // return Color.green;
       }
     }
     

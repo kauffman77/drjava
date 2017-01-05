@@ -226,6 +226,12 @@ public interface OptionConstants {
   /** Color for the line at the right margin. */
   public static final ColorOption RIGHT_MARGIN_COLOR = new ColorOption("right.margin.color", new Color(204,204,204));
   
+  /** Color for the JUnit tests that pass */
+  public static final ColorOption JUNIT_PASS_COLOR = new ColorOption("junit.pass.color", Color.green);
+
+  /** Color for the JUnit tests that fail */
+  public static final ColorOption JUNIT_FAIL_COLOR = new ColorOption("junit.fail.color", Color.red);
+
   /* ---------- Font Options ---------- */
   
   /** Main (definitions document, tab contents) */
