@@ -44,7 +44,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 
 /** * The frame for displaying the HTML help files.
- * @version $Id: HelpFrame.java 5175 2010-01-20 08:46:32Z mgricken $
+ * @version $Id$
  */
 public class HelpFrame extends HTMLFrame {
   private static final String HELP_PATH =  "/edu/rice/cs/drjava/docs/user/";

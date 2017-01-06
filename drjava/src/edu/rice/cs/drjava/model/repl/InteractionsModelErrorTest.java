@@ -56,7 +56,7 @@ import java.io.IOException;
 import edu.rice.cs.drjava.model.GlobalModelTestCase;
 
 /** Tests errors in an InteractionsModel.
-  * @version $Id: InteractionsModelErrorTest.java 5236 2010-04-27 01:43:36Z mgricken $
+  * @version $Id$
   */
 public final class InteractionsModelErrorTest extends GlobalModelTestCase {
   protected static final String UNARY_FUN_NON_PUBLIC_INTERFACE_TEXT = 

@@ -54,7 +54,7 @@ import edu.rice.cs.util.swing.SwingFrame;
 import edu.rice.cs.util.swing.Utilities;
 
 /** The frame for displaying the HTML help files.
-  * @version $Id: HTMLFrame.java 5175 2010-01-20 08:46:32Z mgricken $
+  * @version $Id$
   */
 public class HTMLFrame extends SwingFrame {
   
