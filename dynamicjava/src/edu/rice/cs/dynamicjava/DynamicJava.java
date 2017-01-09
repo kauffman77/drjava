@@ -1,6 +1,7 @@
 package edu.rice.cs.dynamicjava;
 
 import java.io.*;
+import java.util.*;
 import edu.rice.cs.plt.tuple.Option;
 import edu.rice.cs.plt.tuple.OptionVisitor;
 import edu.rice.cs.plt.text.TextUtil;
@@ -22,25 +23,31 @@ public final class DynamicJava {
     ArgumentParser argParser = new ArgumentParser();
     argParser.supportOption("classpath", IOUtil.WORKING_DIRECTORY.toString());
     argParser.supportAlias("cp", "classpath");
+    argParser.supportOption("batch",0);
+    argParser.supportAlias("b", "batch");
     ArgumentParser.Result parsedArgs = argParser.parse(args);
     Iterable<File> cp = IOUtil.parsePath(parsedArgs.getUnaryOption("classpath"));
+    boolean batchMode = parsedArgs.hasOption("batch");
 
     Interpreter i = new Interpreter(Options.DEFAULT, new PathClassLoader(cp));
     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    String prev = null;
-    boolean blank = false;
     String input;
+    String prompt = "> ";
+
+    System.out.println("Welcome to Dynamic Java. Workding directory is: "+IOUtil.WORKING_DIRECTORY.toString());
     do {
-      System.out.print("> ");
-      System.out.flush();
-      input = in.readLine();
+      if(!batchMode){
+        System.out.print(prompt);
+        System.out.flush();
+        input = in.readLine();
+      }
+      else{
+        input = in.readLine();
+        System.out.print(prompt);
+        System.out.println(input);
+      }        
+
       if (input != null) {
-        // two blank lines trigger a recompute
-        if (input.equals("")) {
-          if (blank == true) { input = prev; blank = false; }
-          else { blank = true; }
-        }
-        else { prev = input; blank = false; }
         try {
           Option<Object> result = i.interpret(input);
           result.apply(new OptionVisitor<Object, Void>() {
@@ -53,7 +60,6 @@ public final class DynamicJava {
           System.out.println("INTERNAL ERROR: Uncaught exception");
           e.printStackTrace(System.out);
         }
-        System.out.println();
       }
     } while (input != null);
   }

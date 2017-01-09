@@ -667,6 +667,9 @@ public class ConfigFrame extends SwingFrame {
     addOptionComponent(panel, 
                        newColorOptionComponent(OptionConstants.RIGHT_MARGIN_COLOR, true));
     
+    addOptionComponent(panel, newColorOptionComponent(OptionConstants.JUNIT_PASS_COLOR));
+    addOptionComponent(panel, newColorOptionComponent(OptionConstants.JUNIT_FAIL_COLOR));
+
     panel.displayComponents();
   }
 

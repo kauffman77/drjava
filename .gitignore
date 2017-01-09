@@ -5,3 +5,5 @@
 *~
 drjava/classes
 drjava/drjava.jar
+dynamicjava/src/edu/rice/cs/dynamicjava/symbol/type/*.java
+dynamicjava/src/koala/dynamicjava/parser/impl/*.java

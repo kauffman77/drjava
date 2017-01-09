@@ -184,6 +184,10 @@ public class ConfigDescriptions {
         "The background color of the \"Errors\" button used to show internal DrJava errors.");
     add(OptionConstants.RIGHT_MARGIN_COLOR, "Right Margin Color",
         "The color of the right margin line, if displayed.");
+    add(OptionConstants.JUNIT_PASS_COLOR, "JUnit Pass Color",
+        "The color of test names which pass during JUnit tests");
+    add(OptionConstants.JUNIT_FAIL_COLOR, "JUnit Fail Color",
+        "The color of test names which fail during JUnit tests");
     
     add(OptionConstants.WINDOW_STORE_POSITION,
         "Save Main Window Position",
