@@ -42,7 +42,7 @@ import edu.rice.cs.drjava.model.definitions.reducedmodel.*;
 /** Given the start of the current line is inside a block comment, asks
   * whether the comment begins on the "previous line," ignoring white space.
   * 
-  * @version $Id: QuestionPrevLineStartsComment.java 5175 2010-01-20 08:46:32Z mgricken $
+  * @version $Id$
   */
 class QuestionPrevLineStartsComment extends IndentRuleQuestion {
   

@@ -41,7 +41,7 @@ import edu.rice.cs.drjava.DrJava;
 import edu.rice.cs.drjava.config.OptionConstants;
 
 /** Singleton class to construct and use the indentation decision tree.
-  * @version $Id: Indenter.java 5677 2012-08-17 11:09:48Z rcartwright $
+  * @version $Id$
   */
 public class Indenter {
   

@@ -45,7 +45,7 @@ import edu.rice.cs.drjava.model.AbstractDJDocument;
   * parenthesized expression.  Specifically, this rule determines if the previous line ends in a comma, semicolon, 
   * open paren, or open bracket.  Note that whitespace, blank lines, and comments are disregarded.
   * 
- * @version $Id: QuestionNewParenPhrase.java 5611 2012-07-25 15:03:33Z rcartwright $
+ * @version $Id$
  */
 public class QuestionNewParenPhrase extends IndentRuleQuestion {
   
