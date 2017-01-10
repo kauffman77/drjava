@@ -60,8 +60,8 @@ public class IntegerLiteral extends Literal {
   /**
    * Parses the representation of an integer
    */
-  private static Integer parse(String s) throws NumberFormatException {
-    s = s.toLowerCase();	// handle both 0x/0X and 0b/0B by lowercasing
+  private static Integer parse(String str) throws NumberFormatException {
+    String s = str.toLowerCase(); // handle both 0x/0X and 0b/0B by lowercasing
     int radix = 10;
     int start = 0;
     boolean negate = false;
@@ -72,6 +72,7 @@ public class IntegerLiteral extends Literal {
     if ((end-start>2) && (s.startsWith("0b",start))) { radix = 2; start += 2;}
     else if ((end-start>1) && (s.startsWith("0",start)) && (s.length() > 1)) { radix = 8; start++; }
     // BigInteger can parse hex numbers representing negative ints; Integer can't
+    // System.out.printf("Making big integer from %s with radix %d\n",s.substring(start),radix);
     BigInteger val = new BigInteger(s.substring(start), radix);
     if (negate) { val = val.negate(); }
     int result = val.intValue();
