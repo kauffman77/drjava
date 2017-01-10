@@ -7,3 +7,4 @@ command which we use to dynamically add new paths to the REPL class path.  We wi
 DrJava via Sourceforge to preserve our distribution interface.  The move from Subversion on Sourceforge to Git on Github
 only concerns DrJava developers and others interested in the DrJava code base.
 
+Hernan and Chris are now collaborating.
