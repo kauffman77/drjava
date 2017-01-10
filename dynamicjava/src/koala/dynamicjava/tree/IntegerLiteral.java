@@ -61,13 +61,15 @@ public class IntegerLiteral extends Literal {
    * Parses the representation of an integer
    */
   private static Integer parse(String s) throws NumberFormatException {
+    s = s.toLowerCase();	// handle both 0x/0X and 0b/0B by lowercasing
     int radix = 10;
     int start = 0;
     boolean negate = false;
     int end = s.length();
-    // only consider 0x or 0 or - if this doesn't make the string empty
+    // only consider 0x or 0b or 0 or - if this doesn't make the string empty
     if ((end-start>1) && (s.startsWith("-"))) { start++; negate = true; }
     if ((end-start>2) && (s.startsWith("0x",start))) { radix = 16; start += 2; }
+    if ((end-start>2) && (s.startsWith("0b",start))) { radix = 2; start += 2;}
     else if ((end-start>1) && (s.startsWith("0",start)) && (s.length() > 1)) { radix = 8; start++; }
     // BigInteger can parse hex numbers representing negative ints; Integer can't
     BigInteger val = new BigInteger(s.substring(start), radix);
