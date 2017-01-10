@@ -7,6 +7,8 @@ options {
   JDK_VERSION            = "1.5";
 }
 
+// comment
+
 PARSER_BEGIN(Parser)
 package koala.dynamicjava.parser.impl;
 
