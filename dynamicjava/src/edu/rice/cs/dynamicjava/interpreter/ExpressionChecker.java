@@ -1615,6 +1615,7 @@ public class ExpressionChecker {
       Type expT = check(node.getExpression());
       Type targetT = checkTypeName(node.getReferenceType());
       if (!ts.isReference(expT) || !ts.isReference(targetT) || ts.isDisjoint(targetT, expT)) {
+	  System.out.println("Hello");
         throw new ExecutionError("instanceof.type", node);
       }
       if (!ts.isReifiable(targetT)) {
