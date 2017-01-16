@@ -43,8 +43,10 @@ public final class DynamicJava {
       }
       else{
         input = in.readLine();
-        System.out.print(prompt);
-        System.out.println(input);
+        if(input != null){
+          System.out.print(prompt);
+          System.out.println(input);
+        }
       }        
 
       if (input != null) {
