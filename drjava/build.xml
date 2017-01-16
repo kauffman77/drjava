@@ -220,6 +220,7 @@
     <javac srcdir="src" destdir="classes/base" source="1.7" target="1.7"
            bootclasspath="${java8-runtime}" sourcepath="" includeAntRuntime="no"
            executable="${java8-home}/bin/javac" fork="yes" memoryMaximumSize="1024M"
+           encoding="UTF-8"
            debug="on" optimize="off" deprecation="on" >
       <classpath>
         <!-- TODO: Remove this dependency on tools.jar by refactoring and moving all the dependent
@@ -273,6 +274,7 @@
     <javac srcdir="src" destdir="classes/base" source="1.6" target="1.6"
            bootclasspath="${java8-runtime}" sourcepath="" includeAntRuntime="no"
            executable="javac" fork="yes" memoryMaximumSize="1024M"
+           encoding="UTF-8"
            debug="on" optimize="off" deprecation="on"	>
       <classpath>
         <!-- TODO: Remove this dependency on tools.jar by refactoring and moving all the dependent

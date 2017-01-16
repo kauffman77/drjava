@@ -1614,9 +1614,13 @@ public class ExpressionChecker {
     @Override public Type visit(InstanceOfExpression node) {
       Type expT = check(node.getExpression());
       Type targetT = checkTypeName(node.getReferenceType());
-      if (!ts.isReference(expT) || !ts.isReference(targetT) || ts.isDisjoint(targetT, expT)) {
-        throw new ExecutionError("instanceof.type", node);
-      }
+      // if (!ts.isReference(expT) || !ts.isReference(targetT) || ts.isDisjoint(targetT, expT)) {
+      //   // throw new ExecutionError("instanceof.type", node);
+      // }
+      // 
+      // Removing this check case to allow false to be returned on the
+      // main interactive loop for expressions like "hi" instanceof Integer
+
       if (!ts.isReifiable(targetT)) {
         throw new ExecutionError("reifiable.type", node);
       }

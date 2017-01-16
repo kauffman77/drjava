@@ -1,0 +1,12 @@
+Object s = "hi"
+// should be true
+assert(s instanceof Object)
+
+// should be true
+assert(s instanceof String)
+
+// should be false
+s instanceof Integer
+assert(!(s instanceof Integer))
+
+Integer i = (Integer) s;
