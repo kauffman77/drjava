@@ -146,6 +146,7 @@
   <target name="do-compile" depends="resolve-java8-runtime, assert-drjava-jar-exists">
   
     <echo message="Compiling src directory to classes/base and classes/test with command 'javac'" />
+    <echo>${toString:classpath}</echo>
     
     <mkdir dir="classes/base" />
     <mkdir dir="classes/test" />
