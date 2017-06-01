@@ -8,7 +8,8 @@
 
   <property name="readable-project-name" value="DrJava" />
   <property name="src-working-dir" value="src/edu/rice/cs/drjava" />
-  <property name="junit-jar-to-include" value="lib/concutest-junit-4.7-withrt-nodep.jar" />
+  <!-- <property name="junit-jar-to-include" value="lib/concutest-junit-4.7-withrt-nodep.jar" /> -->
+  <property name="junit-jar-to-include" value="lib/junit-hamcrest.jar" />
   <property name="md5-temp-name" value="classes/md5.properties" />
   <property name="md5-properties-path" value="edu/rice/cs/drjava/md5.properties" />
   <property name="main-class" value="edu.rice.cs.drjava.DrJava" />
