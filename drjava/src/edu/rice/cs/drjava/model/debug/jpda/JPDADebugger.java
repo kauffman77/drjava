@@ -1801,6 +1801,7 @@ public class JPDADebugger implements Debugger {
    * @throws DebugException if something goes wrong
    */
   private void _copyVariablesFromInterpreter() throws DebugException {
+    System.err.println("In _copyVariablesFromInterpreter()");
     // copy variables' values out of interpreter's environment and
     // into the relevant stack frame
     List<ObjectReference> toRelease = new LinkedList<ObjectReference>();
@@ -1821,7 +1822,8 @@ public class JPDADebugger implements Debugger {
               catch (DebugException e) { error.log("Can't unbox variable", e); }
             }
 
-            if ((val != null) && (!oldVal.equals(val))) {
+            System.err.println("oldVal: "+oldVal);
+            if ((val != null)) { 
               try { _runningThread.frame(0).setValue(var, val); }
               catch (InvalidTypeException e) { error.log("Can't set variable", e); }
               catch (ClassNotLoadedException e) { error.log("Can't set variable", e); }
