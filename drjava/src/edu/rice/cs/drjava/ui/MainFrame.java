@@ -7871,6 +7871,7 @@ public class MainFrame extends SwingFrame implements ClipboardOwner, DropTargetL
     EventQueue.invokeLater(new Runnable() { 
       public void run() { 
         setVisible(true);
+        setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH); // start large, fixes Mac OSX minimization start problem
         _compilerErrorPanel.setVisible(true);
         showTab(_compilerErrorPanel, true); 
         /* The following two step sequence was laboriously developed by trial and error; without it the _tabbedPane
